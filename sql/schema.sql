@@ -64,3 +64,15 @@ CREATE TABLE reviews (
     review_creation_date TIMESTAMP,
     review_answer_timestamp TIMESTAMP
 );
+CREATE TABLE geolocation (
+    geolocation_zip_code_prefix INTEGER,
+    geolocation_lat NUMERIC,
+    geolocation_lng NUMERIC,
+    geolocation_city VARCHAR,
+    geolocation_state VARCHAR
+);
+
+CREATE TABLE category_translation (
+    product_category_name VARCHAR PRIMARY KEY,
+    product_category_name_english VARCHAR
+);
