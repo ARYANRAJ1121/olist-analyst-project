@@ -2,24 +2,17 @@ import duckdb
 import pandas as pd
 import os
 
-# =============================
-# PATH SETUP
-# =============================
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(BASE_DIR, "data", "raw")
 OUTPUT_DIR = os.path.join(BASE_DIR, "output")
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-# =============================
-# CONNECT TO DUCKDB
-# =============================
 con = duckdb.connect()
 print("Connected to DuckDB")
 
-# =============================
-# LOAD REQUIRED TABLES
-# =============================
+
 print("Loading orders...")
 con.execute(f"""
     CREATE TABLE orders AS
@@ -40,11 +33,7 @@ con.execute(f"""
 
 print("Tables loaded successfully")
 
-# =============================
-# CHURN FEATURE EXTRACTION
-# Churn definition:
-# Customer is churned if no purchase in last 90 days
-# =============================
+
 churn_query = """
 WITH customer_orders AS (
     SELECT
@@ -105,9 +94,7 @@ df_churn = con.execute(churn_query).df()
 print("\nChurn Feature Table Preview:")
 print(df_churn.head())
 
-# =============================
-# SAVE OUTPUT
-# =============================
+
 output_path = os.path.join(OUTPUT_DIR, "churn_features.csv")
 df_churn.to_csv(output_path, index=False)
 

@@ -2,24 +2,18 @@ import duckdb
 import pandas as pd
 import os
 
-# =============================
-# PATH SETUP
-# =============================
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(BASE_DIR, "data", "raw")
 OUTPUT_DIR = os.path.join(BASE_DIR, "output")
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-# =============================
-# CONNECT TO DUCKDB
-# =============================
+
 con = duckdb.connect()
 print("Connected to DuckDB")
 
-# =============================
-# LOAD REQUIRED TABLES
-# =============================
+
 print("Loading orders...")
 con.execute(f"""
     CREATE TABLE orders AS
@@ -36,9 +30,7 @@ print("Tables loaded successfully")
 
 
 
-# =============================
-# RETENTION METRICS (CORRECT)
-# =============================
+
 retention_query = """
 WITH customer_orders AS (
     SELECT
@@ -65,9 +57,7 @@ df_retention = con.execute(retention_query).df()
 print("\nRetention Metrics (Corrected):")
 print(df_retention)
 
-# =============================
-# SAVE OUTPUT
-# =============================
+
 output_path = os.path.join(OUTPUT_DIR, "retention_metrics.csv")
 df_retention.to_csv(output_path, index=False)
 

@@ -3,9 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 
-# =========================
-# PATH SETUP
-# =========================
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUTPUT_DIR = os.path.join(BASE_DIR, "output")
 FIG_DIR = os.path.join(OUTPUT_DIR, "figures")
@@ -13,9 +11,7 @@ FIG_DIR = os.path.join(OUTPUT_DIR, "figures")
 os.makedirs(FIG_DIR, exist_ok=True)
 sns.set(style="whitegrid")
 
-# =========================
-# 1. Monthly Revenue Trend
-# =========================
+
 rev = pd.read_csv(os.path.join(OUTPUT_DIR, "monthly_revenue.csv"))
 plt.figure(figsize=(10, 5))
 plt.plot(rev["month"], rev["revenue"], marker="o")
@@ -27,9 +23,7 @@ plt.tight_layout()
 plt.savefig(os.path.join(FIG_DIR, "01_monthly_revenue.png"))
 plt.close()
 
-# =========================
-# 2. Order Frequency Distribution (LOG SCALE)
-# =========================
+
 churn = pd.read_csv(os.path.join(OUTPUT_DIR, "churn_features_v2.csv"))
 plt.figure(figsize=(8, 5))
 sns.countplot(x="total_orders", data=churn)
@@ -41,9 +35,7 @@ plt.tight_layout()
 plt.savefig(os.path.join(FIG_DIR, "02_order_frequency.png"))
 plt.close()
 
-# =========================
-# 3. Retention Breakdown
-# =========================
+
 ret = pd.read_csv(os.path.join(OUTPUT_DIR, "retention_metrics.csv"))
 repeat_rate = ret["repeat_purchase_rate"].iloc[0]
 one_time_rate = 1 - repeat_rate
@@ -64,9 +56,7 @@ plt.tight_layout()
 plt.savefig(os.path.join(FIG_DIR, "03_retention_breakdown.png"))
 plt.close()
 
-# =========================
-# 4. Churn Feature Comparison
-# =========================
+
 features = ["total_orders", "total_revenue", "avg_order_value"]
 plt.figure(figsize=(12, 4))
 for i, f in enumerate(features, 1):
@@ -77,9 +67,7 @@ plt.tight_layout()
 plt.savefig(os.path.join(FIG_DIR, "04_churn_feature_comparison.png"))
 plt.close()
 
-# =========================
-# 5. Logistic Regression Coefficients
-# =========================
+
 coef = pd.read_csv(os.path.join(OUTPUT_DIR, "logistic_regression_coefficients_v2.csv"))
 plt.figure(figsize=(8, 5))
 sns.barplot(x="coefficient", y="feature", data=coef)
@@ -88,9 +76,7 @@ plt.tight_layout()
 plt.savefig(os.path.join(FIG_DIR, "05_logistic_coefficients.png"))
 plt.close()
 
-# =========================
-# 6. A/B Test Conversion Lift
-# =========================
+
 ab = pd.read_csv(os.path.join(OUTPUT_DIR, "ab_test_second_purchase_results.csv"))
 plt.figure(figsize=(6, 5))
 sns.barplot(x="group", y="conversion_rate", data=ab)

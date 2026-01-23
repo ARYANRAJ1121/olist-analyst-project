@@ -3,24 +3,18 @@ import pandas as pd
 import os
 
 
-# =============================
-# PATH SETUP
-# =============================
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(BASE_DIR, "data", "raw")
 OUTPUT_DIR = os.path.join(BASE_DIR, "output")
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-# =============================
-# CONNECT TO DUCKDB
-# =============================
+
 con = duckdb.connect()
 print("Connected to DuckDB")
 
-# =============================
-# LOAD TABLES
-# =============================
+
 con.execute(f"""
 CREATE TABLE orders AS
 SELECT * FROM read_csv_auto('{os.path.join(DATA_DIR, "olist_orders_dataset.csv")}');
@@ -38,18 +32,14 @@ SELECT * FROM read_csv_auto('{os.path.join(DATA_DIR, "olist_order_payments_datas
 
 print("Tables loaded")
 
-# =============================
-# DATASET END DATE
-# =============================
+
 dataset_end_date = con.execute("""
 SELECT MAX(order_purchase_timestamp)::DATE FROM orders;
 """).fetchone()[0]
 
 print(f"Dataset end date: {dataset_end_date}")
 
-# =============================
-# CHURN FEATURE EXTRACTION (V2)
-# =============================
+
 churn_query = f"""
 WITH customer_orders AS (
     SELECT
@@ -99,9 +89,7 @@ df_churn = con.execute(churn_query).df()
 print("\nChurn Feature Table Preview:")
 print(df_churn.head())
 
-# =============================
-# SAVE OUTPUT
-# =============================
+
 output_path = os.path.join(OUTPUT_DIR, "churn_features_v2.csv")
 df_churn.to_csv(output_path, index=False)
 

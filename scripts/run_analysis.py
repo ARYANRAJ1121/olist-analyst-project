@@ -2,24 +2,18 @@ import duckdb
 import pandas as pd
 import os
 
-# =============================
-# PATH SETUP
-# =============================
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(BASE_DIR, "data", "raw")
 OUTPUT_DIR = os.path.join(BASE_DIR, "output")
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-# =============================
-# CONNECT TO DUCKDB
-# =============================
+
 con = duckdb.connect()
 print("Connected to DuckDB")
 
-# =============================
-# LOAD REQUIRED TABLES
-# =============================
+
 print("Loading orders table...")
 con.execute(f"""
     CREATE TABLE orders AS
@@ -34,9 +28,7 @@ con.execute(f"""
 
 print("Tables loaded successfully")
 
-# =============================
-# REVENUE ANALYSIS
-# =============================
+
 revenue_query = """
 SELECT
     DATE_TRUNC('month', o.order_purchase_timestamp) AS month,
@@ -54,9 +46,7 @@ df_revenue = con.execute(revenue_query).df()
 print("\nMonthly Revenue (Top 5 Rows):")
 print(df_revenue.head())
 
-# =============================
-# SAVE OUTPUT
-# =============================
+
 output_path = os.path.join(OUTPUT_DIR, "monthly_revenue.csv")
 df_revenue.to_csv(output_path, index=False)
 
