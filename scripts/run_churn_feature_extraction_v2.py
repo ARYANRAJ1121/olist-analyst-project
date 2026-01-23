@@ -2,6 +2,7 @@ import duckdb
 import pandas as pd
 import os
 
+
 # =============================
 # PATH SETUP
 # =============================
@@ -67,7 +68,7 @@ customer_revenue AS (
     SELECT
         c.customer_unique_id,
         SUM(p.payment_value) AS total_revenue,
-        AVG(p.payment_value) AS avg_order_value
+        AVG(p.payment_value) AS avg_order_value 
     FROM orders o
     JOIN customers c
         ON o.customer_id = c.customer_id
@@ -95,7 +96,6 @@ LEFT JOIN customer_revenue cr
 """
 
 df_churn = con.execute(churn_query).df()
-
 print("\nChurn Feature Table Preview:")
 print(df_churn.head())
 
@@ -106,3 +106,4 @@ output_path = os.path.join(OUTPUT_DIR, "churn_features_v2.csv")
 df_churn.to_csv(output_path, index=False)
 
 print(f"\nChurn features v2 saved at: {output_path}")
+
