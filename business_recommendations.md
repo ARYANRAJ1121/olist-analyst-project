@@ -1,6 +1,6 @@
 # Business Recommendations – Olist E-Commerce Analysis
 
-## Executive Summary (Plain English)
+## Executive Summary 
 
 We analyzed customer buying behavior on the Olist marketplace to understand **why customers do not return after their first purchase**.
 
