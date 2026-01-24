@@ -1,8 +1,7 @@
 """
 Olist E-Commerce Analytics Dashboard
 =====================================
-A comprehensive Streamlit dashboard for analyzing customer retention,
-churn prediction, and experimentation results.
+A comprehensive Streamlit dashboard with enhanced interactivity and modern design.
 """
 
 import streamlit as st
@@ -23,115 +22,235 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for premium look
-st.markdown("""
+# Theme configurations
+THEMES = {
+    "Midnight Purple": {
+        "bg_gradient": "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
+        "sidebar_bg": "linear-gradient(180deg, #0f0f23 0%, #1a1a3e 100%)",
+        "primary": "#a855f7",
+        "secondary": "#6366f1",
+        "accent": "#ec4899",
+        "success": "#10b981",
+        "warning": "#f59e0b",
+        "danger": "#ef4444",
+        "text": "#e0e0e0",
+        "muted": "#a0a0a0",
+        "card_bg": "rgba(139, 92, 246, 0.1)",
+        "chart_colors": ["#a855f7", "#6366f1", "#ec4899", "#14b8a6", "#f59e0b"]
+    },
+    "Ocean Blue": {
+        "bg_gradient": "linear-gradient(135deg, #0c1929 0%, #0a2540 50%, #0d3b66 100%)",
+        "sidebar_bg": "linear-gradient(180deg, #071321 0%, #0a2540 100%)",
+        "primary": "#00d4ff",
+        "secondary": "#0099cc",
+        "accent": "#00ff88",
+        "success": "#00ff88",
+        "warning": "#ffcc00",
+        "danger": "#ff5555",
+        "text": "#e0f7ff",
+        "muted": "#88ccdd",
+        "card_bg": "rgba(0, 212, 255, 0.1)",
+        "chart_colors": ["#00d4ff", "#0099cc", "#00ff88", "#ffcc00", "#ff6b9d"]
+    },
+    "Sunset Vibes": {
+        "bg_gradient": "linear-gradient(135deg, #1a1a2e 0%, #2d1b3d 50%, #44203f 100%)",
+        "sidebar_bg": "linear-gradient(180deg, #1a1a2e 0%, #2d1b3d 100%)",
+        "primary": "#ff6b6b",
+        "secondary": "#feca57",
+        "accent": "#ff9ff3",
+        "success": "#1dd1a1",
+        "warning": "#feca57",
+        "danger": "#ff6b6b",
+        "text": "#f5f5f5",
+        "muted": "#c0b0c0",
+        "card_bg": "rgba(255, 107, 107, 0.1)",
+        "chart_colors": ["#ff6b6b", "#feca57", "#ff9ff3", "#54a0ff", "#1dd1a1"]
+    },
+    "Emerald Dark": {
+        "bg_gradient": "linear-gradient(135deg, #0f1419 0%, #1a2f23 50%, #234532 100%)",
+        "sidebar_bg": "linear-gradient(180deg, #0f1419 0%, #1a2f23 100%)",
+        "primary": "#10b981",
+        "secondary": "#34d399",
+        "accent": "#6ee7b7",
+        "success": "#10b981",
+        "warning": "#fbbf24",
+        "danger": "#f87171",
+        "text": "#e0f2e9",
+        "muted": "#9ca3af",
+        "card_bg": "rgba(16, 185, 129, 0.1)",
+        "chart_colors": ["#10b981", "#34d399", "#6ee7b7", "#fbbf24", "#f87171"]
+    }
+}
+
+# Initialize session state
+if 'theme' not in st.session_state:
+    st.session_state.theme = "Midnight Purple"
+
+theme = THEMES[st.session_state.theme]
+
+# Dynamic CSS based on theme
+st.markdown(f"""
 <style>
-    /* Main background and text */
-    .stApp {
-        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
     
-    /* Sidebar styling */
-    [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #0f0f23 0%, #1a1a3e 100%);
+    * {{
+        font-family: 'Inter', sans-serif;
+    }}
+    
+    .stApp {{
+        background: {theme['bg_gradient']};
+    }}
+    
+    [data-testid="stSidebar"] {{
+        background: {theme['sidebar_bg']};
         border-right: 1px solid rgba(255, 255, 255, 0.1);
-    }
+    }}
     
-    [data-testid="stSidebar"] .stMarkdown {
-        color: #e0e0e0;
-    }
+    [data-testid="stSidebar"] .stMarkdown {{
+        color: {theme['text']};
+    }}
     
-    /* Headers */
-    h1, h2, h3 {
-        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    h1, h2, h3 {{
+        background: linear-gradient(90deg, {theme['primary']} 0%, {theme['accent']} 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-    }
+        font-weight: 700;
+    }}
     
-    /* Metric cards */
-    [data-testid="stMetric"] {
-        background: rgba(255, 255, 255, 0.05);
+    [data-testid="stMetric"] {{
+        background: {theme['card_bg']};
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 16px;
         padding: 20px;
         backdrop-filter: blur(10px);
-    }
+        transition: all 0.3s ease;
+    }}
     
-    [data-testid="stMetricValue"] {
-        color: #667eea !important;
+    [data-testid="stMetric"]:hover {{
+        transform: translateY(-5px);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        border-color: {theme['primary']};
+    }}
+    
+    [data-testid="stMetricValue"] {{
+        color: {theme['primary']} !important;
         font-size: 2rem !important;
-    }
+        font-weight: 700 !important;
+    }}
     
-    [data-testid="stMetricLabel"] {
-        color: #a0a0a0 !important;
-    }
+    [data-testid="stMetricLabel"] {{
+        color: {theme['muted']} !important;
+    }}
     
-    /* Cards/containers */
-    .stTabs [data-baseweb="tab-list"] {
+    .stTabs [data-baseweb="tab-list"] {{
         gap: 8px;
         background: rgba(255, 255, 255, 0.05);
         border-radius: 12px;
         padding: 8px;
-    }
+    }}
     
-    .stTabs [data-baseweb="tab"] {
+    .stTabs [data-baseweb="tab"] {{
         background: transparent;
         border-radius: 8px;
-        color: #a0a0a0;
+        color: {theme['muted']};
         padding: 12px 24px;
-    }
+        transition: all 0.3s ease;
+    }}
     
-    .stTabs [aria-selected="true"] {
-        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    .stTabs [aria-selected="true"] {{
+        background: linear-gradient(90deg, {theme['primary']} 0%, {theme['secondary']} 100%);
         color: white !important;
-    }
+    }}
     
-    /* Expander */
-    .streamlit-expanderHeader {
+    .stAlert {{
         background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 12px;
-    }
+    }}
     
-    /* Info boxes */
-    .stAlert {
-        background: rgba(102, 126, 234, 0.1);
-        border: 1px solid rgba(102, 126, 234, 0.3);
-        border-radius: 12px;
-    }
-    
-    /* Selectbox and other inputs */
-    .stSelectbox > div > div {
+    .stSelectbox > div > div {{
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 8px;
-    }
+    }}
     
-    /* Custom class for KPI cards */
-    .kpi-card {
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+    .kpi-card {{
+        background: linear-gradient(135deg, {theme['card_bg']} 0%, rgba(255,255,255,0.02) 100%);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 20px;
-        padding: 30px;
+        padding: 25px;
         text-align: center;
         backdrop-filter: blur(10px);
-    }
+        transition: all 0.3s ease;
+    }}
     
-    .big-number {
-        font-size: 3rem;
-        font-weight: bold;
-        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
+    .kpi-card:hover {{
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    }}
     
-    /* Footer */
-    .footer {
+    .big-number {{
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: {theme['primary']};
+    }}
+    
+    .stat-label {{
+        color: {theme['muted']};
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }}
+    
+    .insight-card {{
+        background: {theme['card_bg']};
+        border-left: 4px solid {theme['primary']};
+        padding: 20px;
+        border-radius: 0 12px 12px 0;
+        margin: 15px 0;
+    }}
+    
+    .pulse {{
+        animation: pulse 2s infinite;
+    }}
+    
+    @keyframes pulse {{
+        0% {{ opacity: 1; }}
+        50% {{ opacity: 0.7; }}
+        100% {{ opacity: 1; }}
+    }}
+    
+    .footer {{
         text-align: center;
         padding: 20px;
-        color: #666;
+        color: {theme['muted']};
         font-size: 0.9rem;
-    }
+    }}
+    
+    .footer a {{
+        color: {theme['primary']};
+        text-decoration: none;
+    }}
+    
+    /* Button styling */
+    .stButton > button {{
+        background: linear-gradient(90deg, {theme['primary']} 0%, {theme['secondary']} 100%);
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }}
+    
+    .stButton > button:hover {{
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    }}
+    
+    /* Slider styling */
+    .stSlider > div > div {{
+        background: linear-gradient(90deg, {theme['primary']} 0%, {theme['secondary']} 100%);
+    }}
 </style>
 """, unsafe_allow_html=True)
 
@@ -147,7 +266,6 @@ def load_data():
     
     data = {}
     
-    # Load output files
     try:
         data['monthly_revenue'] = pd.read_csv(os.path.join(output_dir, "monthly_revenue.csv"))
         data['monthly_revenue']['month'] = pd.to_datetime(data['monthly_revenue']['month'])
@@ -179,7 +297,6 @@ def load_data():
     except:
         data['logistic_coef'] = None
     
-    # Load raw orders for additional analysis
     try:
         data['orders'] = pd.read_csv(os.path.join(raw_dir, "olist_orders_dataset.csv"))
         data['orders']['order_purchase_timestamp'] = pd.to_datetime(data['orders']['order_purchase_timestamp'])
@@ -212,6 +329,20 @@ with st.sidebar:
     st.markdown("## 📊 Olist Analytics")
     st.markdown("---")
     
+    # Theme Selector
+    st.markdown("### 🎨 Theme")
+    selected_theme = st.selectbox(
+        "Choose theme:",
+        list(THEMES.keys()),
+        index=list(THEMES.keys()).index(st.session_state.theme),
+        label_visibility="collapsed"
+    )
+    if selected_theme != st.session_state.theme:
+        st.session_state.theme = selected_theme
+        st.rerun()
+    
+    st.markdown("---")
+    
     # Navigation
     page = st.radio(
         "Navigate to:",
@@ -237,43 +368,41 @@ with st.sidebar:
         st.metric("Repeat Rate", f"{repeat_rate:.1f}%")
     
     st.markdown("---")
-    st.markdown("""
-    <div style='text-align: center; color: #666; font-size: 0.8rem;'>
+    st.markdown(f"""
+    <div style='text-align: center; color: {theme['muted']}; font-size: 0.8rem;'>
         Built with ❤️ using Streamlit<br>
         Data: Olist E-Commerce Dataset
     </div>
     """, unsafe_allow_html=True)
 
 # ============================================================================
-# MAIN CONTENT
+# HELPER FUNCTIONS
 # ============================================================================
-
-# Color palette for consistent styling
-colors = {
-    'primary': '#667eea',
-    'secondary': '#764ba2',
-    'success': '#00d4aa',
-    'warning': '#ffc107',
-    'danger': '#ff6b6b',
-    'info': '#17a2b8',
-    'gradient': ['#667eea', '#764ba2', '#f093fb', '#f5576c'],
-    'dark_bg': 'rgba(0,0,0,0)',
-    'chart_bg': 'rgba(255,255,255,0.02)'
-}
-
 def create_plotly_layout(title="", height=400):
-    """Create consistent Plotly layout"""
+    """Create consistent Plotly layout with current theme"""
     return dict(
         title=dict(text=title, font=dict(size=20, color='white')),
-        paper_bgcolor=colors['dark_bg'],
-        plot_bgcolor=colors['chart_bg'],
-        font=dict(color='#a0a0a0'),
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(255,255,255,0.02)',
+        font=dict(color=theme['muted'], family='Inter'),
         height=height,
         margin=dict(l=50, r=50, t=80, b=50),
         xaxis=dict(gridcolor='rgba(255,255,255,0.05)', zerolinecolor='rgba(255,255,255,0.1)'),
         yaxis=dict(gridcolor='rgba(255,255,255,0.05)', zerolinecolor='rgba(255,255,255,0.1)'),
-        legend=dict(bgcolor='rgba(0,0,0,0)', font=dict(color='white'))
+        legend=dict(bgcolor='rgba(0,0,0,0)', font=dict(color='white')),
+        hoverlabel=dict(bgcolor=theme['primary'], font_size=14, font_family='Inter')
     )
+
+def create_kpi_card(title, value, subtitle="", icon=""):
+    """Create a styled KPI card"""
+    return f"""
+    <div class='kpi-card'>
+        <div style='font-size: 1.5rem;'>{icon}</div>
+        <div class='big-number'>{value}</div>
+        <div style='color: white; font-weight: 600; margin-top: 5px;'>{title}</div>
+        <div class='stat-label'>{subtitle}</div>
+    </div>
+    """
 
 # ============================================================================
 # PAGE: OVERVIEW
@@ -284,31 +413,31 @@ if page == "🏠 Overview":
     
     st.markdown("---")
     
-    # KPI Row
+    # Animated KPI Row
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
         if data['retention_metrics'] is not None:
             total_customers = int(data['retention_metrics']['total_customers'].iloc[0])
-            st.metric("👥 Total Customers", f"{total_customers:,}", delta="93K+ unique")
+            st.markdown(create_kpi_card("Total Customers", f"{total_customers:,}", "Unique buyers", "👥"), unsafe_allow_html=True)
     
     with col2:
         if data['monthly_revenue'] is not None:
             total_revenue = data['monthly_revenue']['revenue'].sum()
-            st.metric("💰 Total Revenue", f"R${total_revenue/1e6:.1f}M", delta="2016-2018")
+            st.markdown(create_kpi_card("Total Revenue", f"R${total_revenue/1e6:.1f}M", "2016-2018", "💰"), unsafe_allow_html=True)
     
     with col3:
         if data['retention_metrics'] is not None:
             repeat_rate = data['retention_metrics']['repeat_purchase_rate'].iloc[0] * 100
-            st.metric("🔄 Repeat Rate", f"{repeat_rate:.1f}%", delta="-96.9% One-time", delta_color="inverse")
+            st.markdown(create_kpi_card("Repeat Rate", f"{repeat_rate:.1f}%", "Return customers", "🔄"), unsafe_allow_html=True)
     
     with col4:
         if data['ab_test'] is not None:
             lift = ((data['ab_test'][data['ab_test']['group'] == 'treatment']['conversion_rate'].values[0] / 
                     data['ab_test'][data['ab_test']['group'] == 'control']['conversion_rate'].values[0]) - 1) * 100
-            st.metric("🧪 A/B Test Lift", f"+{lift:.0f}%", delta="Significant")
+            st.markdown(create_kpi_card("A/B Test Lift", f"+{lift:.0f}%", "Significant result", "🧪"), unsafe_allow_html=True)
     
-    st.markdown("---")
+    st.markdown("<br>", unsafe_allow_html=True)
     
     # Two column layout for overview charts
     col1, col2 = st.columns(2)
@@ -321,14 +450,15 @@ if page == "🏠 Overview":
                 x=data['monthly_revenue']['month'],
                 y=data['monthly_revenue']['revenue'],
                 mode='lines+markers',
-                line=dict(color=colors['primary'], width=3),
-                marker=dict(size=8, color=colors['secondary']),
+                line=dict(color=theme['primary'], width=3, shape='spline'),
+                marker=dict(size=8, color=theme['secondary'], line=dict(width=2, color='white')),
                 fill='tozeroy',
-                fillcolor='rgba(102, 126, 234, 0.1)',
-                name='Revenue'
+                fillcolor=f"rgba{tuple(int(theme['primary'].lstrip('#')[i:i+2], 16) for i in (0, 2, 4)) + (0.1,)}",
+                name='Revenue',
+                hovertemplate="<b>%{x|%B %Y}</b><br>Revenue: R$%{y:,.0f}<extra></extra>"
             ))
-            fig.update_layout(**create_plotly_layout("Monthly Revenue (R$)", 350))
-            st.plotly_chart(fig, use_container_width=True)
+            fig.update_layout(**create_plotly_layout("", 380))
+            st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
     
     with col2:
         st.markdown("### 🥧 Customer Retention")
@@ -340,15 +470,16 @@ if page == "🏠 Overview":
                 labels=['One-time Customers', 'Repeat Customers'],
                 values=[one_time_rate * 100, repeat_rate * 100],
                 hole=0.6,
-                marker=dict(colors=[colors['danger'], colors['success']]),
+                marker=dict(colors=[theme['danger'], theme['success']]),
                 textinfo='percent+label',
-                textfont=dict(size=14, color='white'),
-                hovertemplate="<b>%{label}</b><br>%{value:.1f}%<extra></extra>"
+                textfont=dict(size=13, color='white'),
+                hovertemplate="<b>%{label}</b><br>%{value:.1f}%<extra></extra>",
+                pull=[0.02, 0.05]
             )])
-            fig.update_layout(**create_plotly_layout("", 350))
-            fig.add_annotation(text="97%", x=0.5, y=0.5, font=dict(size=40, color='white'), showarrow=False)
-            fig.add_annotation(text="One-time", x=0.5, y=0.38, font=dict(size=14, color='#a0a0a0'), showarrow=False)
-            st.plotly_chart(fig, use_container_width=True)
+            fig.update_layout(**create_plotly_layout("", 380))
+            fig.add_annotation(text="97%", x=0.5, y=0.5, font=dict(size=36, color='white', family='Inter'), showarrow=False)
+            fig.add_annotation(text="One-time", x=0.5, y=0.38, font=dict(size=12, color=theme['muted']), showarrow=False)
+            st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
     
     st.markdown("---")
     
@@ -388,24 +519,53 @@ elif page == "📈 Revenue Analysis":
     if data['monthly_revenue'] is not None:
         df_rev = data['monthly_revenue'].copy()
         
-        # Monthly Revenue Trend
+        # Interactive Date Range Filter
         st.markdown("---")
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            st.markdown("### 📅 Filter by Date Range")
+        with col2:
+            date_filter = st.selectbox("Quick Select:", ["All Time", "2017 Only", "2018 Only"], label_visibility="collapsed")
+        
+        if date_filter == "2017 Only":
+            df_rev = df_rev[df_rev['month'].dt.year == 2017]
+        elif date_filter == "2018 Only":
+            df_rev = df_rev[df_rev['month'].dt.year == 2018]
+        
+        # Monthly Revenue Trend with animation
         st.markdown("### Monthly Revenue Trend")
         
+        chart_type = st.radio("Chart Type:", ["Area", "Line", "Bar"], horizontal=True)
+        
         fig = go.Figure()
-        fig.add_trace(go.Scatter(
-            x=df_rev['month'],
-            y=df_rev['revenue'],
-            mode='lines+markers',
-            line=dict(color=colors['primary'], width=3, shape='spline'),
-            marker=dict(size=10, color=colors['secondary'], line=dict(width=2, color='white')),
-            fill='tozeroy',
-            fillcolor='rgba(102, 126, 234, 0.15)',
-            name='Revenue',
-            hovertemplate="<b>%{x|%B %Y}</b><br>Revenue: R$%{y:,.0f}<extra></extra>"
-        ))
+        if chart_type == "Area":
+            fig.add_trace(go.Scatter(
+                x=df_rev['month'], y=df_rev['revenue'],
+                mode='lines+markers',
+                line=dict(color=theme['primary'], width=3, shape='spline'),
+                marker=dict(size=10, color=theme['secondary'], line=dict(width=2, color='white')),
+                fill='tozeroy',
+                fillcolor=f"rgba{tuple(int(theme['primary'].lstrip('#')[i:i+2], 16) for i in (0, 2, 4)) + (0.15,)}",
+                name='Revenue',
+                hovertemplate="<b>%{x|%B %Y}</b><br>Revenue: R$%{y:,.0f}<extra></extra>"
+            ))
+        elif chart_type == "Line":
+            fig.add_trace(go.Scatter(
+                x=df_rev['month'], y=df_rev['revenue'],
+                mode='lines+markers',
+                line=dict(color=theme['primary'], width=4),
+                marker=dict(size=12, color=theme['accent']),
+                hovertemplate="<b>%{x|%B %Y}</b><br>Revenue: R$%{y:,.0f}<extra></extra>"
+            ))
+        else:
+            fig.add_trace(go.Bar(
+                x=df_rev['month'], y=df_rev['revenue'],
+                marker=dict(color=theme['chart_colors'][0], line=dict(width=0)),
+                hovertemplate="<b>%{x|%B %Y}</b><br>Revenue: R$%{y:,.0f}<extra></extra>"
+            ))
+        
         fig.update_layout(**create_plotly_layout("", 450))
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
         
         # Revenue Statistics
         col1, col2, col3, col4 = st.columns(4)
@@ -417,8 +577,9 @@ elif page == "📈 Revenue Analysis":
         with col3:
             st.metric("📈 Peak Month", f"R${df_rev['revenue'].max():,.0f}")
         with col4:
-            growth = ((df_rev['revenue'].iloc[-1] / df_rev['revenue'].iloc[1]) - 1) * 100
-            st.metric("🚀 Overall Growth", f"+{growth:.0f}%")
+            if len(df_rev) > 1:
+                growth = ((df_rev['revenue'].iloc[-1] / df_rev['revenue'].iloc[1]) - 1) * 100
+                st.metric("🚀 Overall Growth", f"+{growth:.0f}%")
         
         st.markdown("---")
         
@@ -426,8 +587,6 @@ elif page == "📈 Revenue Analysis":
         st.markdown("### Year-over-Year Comparison")
         
         df_rev['year'] = df_rev['month'].dt.year
-        df_rev['month_name'] = df_rev['month'].dt.month_name()
-        
         yearly_data = df_rev.groupby('year')['revenue'].sum().reset_index()
         
         fig = go.Figure(data=[
@@ -435,8 +594,7 @@ elif page == "📈 Revenue Analysis":
                 x=yearly_data['year'].astype(str),
                 y=yearly_data['revenue'],
                 marker=dict(
-                    color=yearly_data['revenue'],
-                    colorscale=[[0, colors['primary']], [1, colors['secondary']]],
+                    color=theme['chart_colors'][:len(yearly_data)],
                     line=dict(width=0)
                 ),
                 text=yearly_data['revenue'].apply(lambda x: f'R${x/1e6:.1f}M'),
@@ -445,8 +603,8 @@ elif page == "📈 Revenue Analysis":
                 hovertemplate="<b>%{x}</b><br>Revenue: R$%{y:,.0f}<extra></extra>"
             )
         ])
-        fig.update_layout(**create_plotly_layout("Annual Revenue", 400))
-        st.plotly_chart(fig, use_container_width=True)
+        fig.update_layout(**create_plotly_layout("", 400))
+        st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
     else:
         st.error("Revenue data not available. Please run the analysis pipeline first.")
 
@@ -475,39 +633,40 @@ elif page == "🔄 Retention & Churn":
                     labels=['One-time Customers', 'Repeat Customers'],
                     values=[one_time_rate * 100, repeat_rate * 100],
                     hole=0.65,
-                    marker=dict(colors=['#ff6b6b', '#00d4aa']),
+                    marker=dict(colors=[theme['danger'], theme['success']]),
                     textinfo='percent',
                     textfont=dict(size=16, color='white'),
-                    hovertemplate="<b>%{label}</b><br>%{percent}<extra></extra>"
+                    hovertemplate="<b>%{label}</b><br>%{percent}<extra></extra>",
+                    pull=[0.02, 0.08]
                 )])
                 fig.update_layout(**create_plotly_layout("", 400))
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
             
             with col2:
                 st.markdown("#### 📌 Key Metrics")
                 
                 st.markdown(f"""
-                <div style='background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; margin: 10px 0;'>
-                    <h3 style='color: #667eea; margin: 0;'>{int(ret['total_customers'].iloc[0]):,}</h3>
-                    <p style='color: #a0a0a0; margin: 5px 0 0 0;'>Total Unique Customers</p>
+                <div style='background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; margin: 10px 0; border-left: 4px solid {theme["primary"]};'>
+                    <h3 style='color: {theme["primary"]}; margin: 0;'>{int(ret['total_customers'].iloc[0]):,}</h3>
+                    <p style='color: {theme["muted"]}; margin: 5px 0 0 0;'>Total Unique Customers</p>
                 </div>
                 """, unsafe_allow_html=True)
                 
                 st.markdown(f"""
-                <div style='background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; margin: 10px 0;'>
-                    <h3 style='color: #00d4aa; margin: 0;'>{int(ret['repeat_customers'].iloc[0]):,}</h3>
-                    <p style='color: #a0a0a0; margin: 5px 0 0 0;'>Repeat Customers</p>
+                <div style='background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; margin: 10px 0; border-left: 4px solid {theme["success"]};'>
+                    <h3 style='color: {theme["success"]}; margin: 0;'>{int(ret['repeat_customers'].iloc[0]):,}</h3>
+                    <p style='color: {theme["muted"]}; margin: 5px 0 0 0;'>Repeat Customers</p>
                 </div>
                 """, unsafe_allow_html=True)
                 
                 st.markdown(f"""
-                <div style='background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; margin: 10px 0;'>
-                    <h3 style='color: #ff6b6b; margin: 0;'>{repeat_rate*100:.1f}%</h3>
-                    <p style='color: #a0a0a0; margin: 5px 0 0 0;'>Repeat Purchase Rate</p>
+                <div style='background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; margin: 10px 0; border-left: 4px solid {theme["danger"]};'>
+                    <h3 style='color: {theme["danger"]}; margin: 0;'>{repeat_rate*100:.1f}%</h3>
+                    <p style='color: {theme["muted"]}; margin: 5px 0 0 0;'>Repeat Purchase Rate</p>
                 </div>
                 """, unsafe_allow_html=True)
                 
-                st.info("💡 **Insight:** With only ~3% repeat rate, focus should be on post-purchase engagement to encourage second purchases.")
+                st.info("💡 **Insight:** With only ~3% repeat rate, focus should be on post-purchase engagement.")
     
     with tabs[1]:
         st.markdown("### Order Frequency Distribution")
@@ -515,25 +674,26 @@ elif page == "🔄 Retention & Churn":
         if data['churn_features'] is not None:
             churn = data['churn_features']
             
-            order_dist = churn['total_orders'].value_counts().sort_index().reset_index()
+            # Interactive slider for filtering
+            max_orders = int(churn['total_orders'].max())
+            order_range = st.slider("Filter by order count:", 1, min(max_orders, 20), (1, min(10, max_orders)))
+            
+            filtered_churn = churn[(churn['total_orders'] >= order_range[0]) & (churn['total_orders'] <= order_range[1])]
+            order_dist = filtered_churn['total_orders'].value_counts().sort_index().reset_index()
             order_dist.columns = ['orders', 'customers']
             
             fig = go.Figure()
             fig.add_trace(go.Bar(
                 x=order_dist['orders'],
                 y=order_dist['customers'],
-                marker=dict(
-                    color=order_dist['customers'],
-                    colorscale=[[0, colors['secondary']], [1, colors['primary']]],
-                ),
+                marker=dict(color=theme['chart_colors'][0]),
                 hovertemplate="<b>%{x} Orders</b><br>Customers: %{y:,}<extra></extra>"
             ))
-            fig.update_layout(**create_plotly_layout("Number of Orders per Customer", 400))
+            fig.update_layout(**create_plotly_layout("", 400))
             fig.update_yaxes(type="log", title="Number of Customers (log scale)")
             fig.update_xaxes(title="Number of Orders")
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
             
-            # Stats
             col1, col2, col3 = st.columns(3)
             with col1:
                 pct_one = (churn['total_orders'] == 1).sum() / len(churn) * 100
@@ -551,21 +711,23 @@ elif page == "🔄 Retention & Churn":
         if data['churn_features'] is not None:
             churn = data['churn_features']
             
-            features = ['total_orders', 'total_revenue', 'avg_order_value']
+            # Feature selector
+            available_features = ['total_orders', 'total_revenue', 'avg_order_value']
+            selected_features = st.multiselect("Select features to compare:", available_features, default=available_features)
             
-            fig = make_subplots(rows=1, cols=3, subplot_titles=features)
-            
-            for i, feat in enumerate(features, 1):
-                churned = churn[churn['is_churned'] == 1][feat]
-                active = churn[churn['is_churned'] == 0][feat]
+            if selected_features:
+                fig = make_subplots(rows=1, cols=len(selected_features), subplot_titles=selected_features)
                 
-                fig.add_trace(go.Box(y=churned, name='Churned', marker_color=colors['danger'], showlegend=(i==1)), row=1, col=i)
-                fig.add_trace(go.Box(y=active, name='Active', marker_color=colors['success'], showlegend=(i==1)), row=1, col=i)
+                for i, feat in enumerate(selected_features, 1):
+                    churned = churn[churn['is_churned'] == 1][feat]
+                    active = churn[churn['is_churned'] == 0][feat]
+                    
+                    fig.add_trace(go.Box(y=churned, name='Churned', marker_color=theme['danger'], showlegend=(i==1)), row=1, col=i)
+                    fig.add_trace(go.Box(y=active, name='Active', marker_color=theme['success'], showlegend=(i==1)), row=1, col=i)
+                
+                fig.update_layout(**create_plotly_layout("", 400))
+                st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
             
-            fig.update_layout(**create_plotly_layout("Feature Distribution: Churned vs Active", 400))
-            st.plotly_chart(fig, use_container_width=True)
-            
-            # Statistical comparison table
             if data['statistical_tests'] is not None:
                 st.markdown("#### Statistical Test Results")
                 stat_df = data['statistical_tests'].copy()
@@ -589,7 +751,7 @@ elif page == "🔄 Retention & Churn":
                 y=coef['feature'],
                 orientation='h',
                 marker=dict(
-                    color=coef['coefficient'].apply(lambda x: colors['success'] if x > 0 else colors['danger'])
+                    color=[theme['success'] if x > 0 else theme['danger'] for x in coef['coefficient']]
                 ),
                 text=coef['coefficient'].apply(lambda x: f'{x:.3f}'),
                 textposition='outside',
@@ -597,12 +759,11 @@ elif page == "🔄 Retention & Churn":
             ))
             fig.update_layout(**create_plotly_layout("Feature Coefficients (Leakage-Free Model)", 350))
             fig.update_xaxes(title="Coefficient Value")
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
             
             st.warning("""
             ⚠️ **Model Insight:** Without data leakage, the model shows weak predictive power. 
-            The low coefficient magnitudes indicate that transactional features alone cannot reliably predict churn early.
-            This suggests that **controlled experimentation** may be more effective than predictive modeling for retention strategy.
+            This suggests that **controlled experimentation** may be more effective than predictive modeling.
             """)
 
 # ============================================================================
@@ -617,23 +778,21 @@ elif page == "🧪 A/B Testing":
         
         st.markdown("---")
         
-        # Results Overview
-        col1, col2, col3 = st.columns(3)
-        
         control_rate = ab[ab['group'] == 'control']['conversion_rate'].values[0] * 100
         treatment_rate = ab[ab['group'] == 'treatment']['conversion_rate'].values[0] * 100
         lift = ((treatment_rate / control_rate) - 1) * 100
         
+        col1, col2, col3 = st.columns(3)
+        
         with col1:
-            st.metric("Control Conversion", f"{control_rate:.2f}%", help="Baseline conversion rate")
+            st.markdown(create_kpi_card("Control", f"{control_rate:.2f}%", "Baseline conversion", "🎯"), unsafe_allow_html=True)
         with col2:
-            st.metric("Treatment Conversion", f"{treatment_rate:.2f}%", delta=f"+{treatment_rate - control_rate:.2f}%")
+            st.markdown(create_kpi_card("Treatment", f"{treatment_rate:.2f}%", f"+{treatment_rate - control_rate:.2f}% absolute", "🚀"), unsafe_allow_html=True)
         with col3:
-            st.metric("Relative Lift", f"+{lift:.0f}%", delta="Statistically Significant ✓")
+            st.markdown(create_kpi_card("Relative Lift", f"+{lift:.0f}%", "Statistically Significant ✓", "📈"), unsafe_allow_html=True)
         
         st.markdown("---")
         
-        # Visualization
         col1, col2 = st.columns(2)
         
         with col1:
@@ -643,52 +802,48 @@ elif page == "🧪 A/B Testing":
             fig.add_trace(go.Bar(
                 x=['Control', 'Treatment'],
                 y=[control_rate, treatment_rate],
-                marker=dict(color=[colors['secondary'], colors['primary']]),
+                marker=dict(color=[theme['secondary'], theme['primary']], line=dict(width=0)),
                 text=[f'{control_rate:.2f}%', f'{treatment_rate:.2f}%'],
                 textposition='outside',
-                textfont=dict(size=16, color='white'),
+                textfont=dict(size=18, color='white', family='Inter'),
                 hovertemplate="<b>%{x}</b><br>Conversion: %{y:.2f}%<extra></extra>"
             ))
             fig.update_layout(**create_plotly_layout("", 400))
-            fig.update_yaxes(title="Conversion Rate (%)", range=[0, max(treatment_rate * 1.3, 10)])
-            st.plotly_chart(fig, use_container_width=True)
+            fig.update_yaxes(title="Conversion Rate (%)", range=[0, max(treatment_rate * 1.4, 10)])
+            st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
         
         with col2:
             st.markdown("### Sample Size & Conversions")
-            
-            fig = go.Figure()
             
             control_users = ab[ab['group'] == 'control']['users'].values[0]
             control_conv = ab[ab['group'] == 'control']['conversions'].values[0]
             treatment_users = ab[ab['group'] == 'treatment']['users'].values[0]
             treatment_conv = ab[ab['group'] == 'treatment']['conversions'].values[0]
             
+            fig = go.Figure()
             fig.add_trace(go.Funnel(
                 name='Control',
                 y=['Total Users', 'Conversions'],
                 x=[control_users, control_conv],
                 textposition="inside",
                 textinfo="value",
-                marker=dict(color=[colors['secondary'], colors['danger']]),
+                marker=dict(color=[theme['secondary'], theme['danger']]),
                 textfont=dict(size=14)
             ))
-            
             fig.add_trace(go.Funnel(
                 name='Treatment',
                 y=['Total Users', 'Conversions'],
                 x=[treatment_users, treatment_conv],
                 textposition="inside",
                 textinfo="value",
-                marker=dict(color=[colors['primary'], colors['success']]),
+                marker=dict(color=[theme['primary'], theme['success']]),
                 textfont=dict(size=14)
             ))
-            
             fig.update_layout(**create_plotly_layout("", 400))
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
         
         st.markdown("---")
         
-        # Statistical Details
         st.markdown("### 📊 Statistical Details")
         
         col1, col2 = st.columns(2)
@@ -710,20 +865,19 @@ elif page == "🧪 A/B Testing":
             st.success("""
             **🎯 Conclusion:**
             
-            The treatment intervention shows a statistically significant improvement in second-purchase conversion rates.
-            With a **+67% relative lift** and p-value < 0.05, we can confidently recommend implementing this retention strategy.
+            The treatment shows a **+67% relative lift** with p-value < 0.05.
             
             **Recommendation:** Roll out the treatment to all first-time customers.
             """)
     else:
-        st.error("A/B test results not available. Please run the analysis pipeline first.")
+        st.error("A/B test results not available.")
 
 # ============================================================================
 # PAGE: STATISTICAL ANALYSIS
 # ============================================================================
 elif page == "🔬 Statistical Analysis":
     st.markdown("# 🔬 Statistical Analysis")
-    st.markdown("### Hypothesis testing and statistical validation of findings")
+    st.markdown("### Hypothesis testing and statistical validation")
     
     if data['statistical_tests'] is not None:
         stat = data['statistical_tests']
@@ -731,68 +885,66 @@ elif page == "🔬 Statistical Analysis":
         st.markdown("---")
         st.markdown("### Churned vs Active Customer Comparison")
         
-        # Feature comparison
-        for idx, row in stat.iterrows():
-            st.markdown(f"#### 📊 {row['feature'].replace('_', ' ').title()}")
-            
-            col1, col2, col3 = st.columns(3)
-            
-            with col1:
-                fig = go.Figure()
-                fig.add_trace(go.Bar(
-                    x=['Churned', 'Active'],
-                    y=[row['churned_mean'], row['active_mean']],
-                    marker=dict(color=[colors['danger'], colors['success']]),
-                    text=[f"{row['churned_mean']:.2f}", f"{row['active_mean']:.2f}"],
-                    textposition='outside',
-                    textfont=dict(color='white')
-                ))
-                fig.update_layout(**create_plotly_layout("Mean Values", 300))
-                st.plotly_chart(fig, use_container_width=True)
-            
-            with col2:
-                significance = row['t_test_p_value'] < 0.05
-                color = colors['success'] if significance else colors['danger']
-                status = "Significant" if significance else "Not Significant"
-                
-                st.markdown(f"""
-                <div style='background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; text-align: center; height: 200px; display: flex; flex-direction: column; justify-content: center;'>
-                    <h4 style='color: #a0a0a0; margin: 0;'>T-Test P-Value</h4>
-                    <h2 style='color: {color}; margin: 10px 0;'>{row['t_test_p_value']:.4f}</h2>
-                    <p style='color: {color};'>{status}</p>
-                </div>
-                """, unsafe_allow_html=True)
-            
-            with col3:
-                significance = row['mannwhitney_p_value'] < 0.05
-                color = colors['success'] if significance else colors['danger']
-                status = "Significant" if significance else "Not Significant"
-                
-                st.markdown(f"""
-                <div style='background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; text-align: center; height: 200px; display: flex; flex-direction: column; justify-content: center;'>
-                    <h4 style='color: #a0a0a0; margin: 0;'>Mann-Whitney P-Value</h4>
-                    <h2 style='color: {color}; margin: 10px 0;'>{row['mannwhitney_p_value']:.4f}</h2>
-                    <p style='color: {color};'>{status}</p>
-                </div>
-                """, unsafe_allow_html=True)
-            
-            st.markdown("---")
+        # Feature selector
+        selected_feature = st.selectbox("Select feature to analyze:", stat['feature'].tolist())
         
-        # Summary
+        row = stat[stat['feature'] == selected_feature].iloc[0]
+        
+        st.markdown(f"#### 📊 {row['feature'].replace('_', ' ').title()}")
+        
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            fig = go.Figure()
+            fig.add_trace(go.Bar(
+                x=['Churned', 'Active'],
+                y=[row['churned_mean'], row['active_mean']],
+                marker=dict(color=[theme['danger'], theme['success']]),
+                text=[f"{row['churned_mean']:.2f}", f"{row['active_mean']:.2f}"],
+                textposition='outside',
+                textfont=dict(color='white')
+            ))
+            fig.update_layout(**create_plotly_layout("Mean Values", 300))
+            st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+        
+        with col2:
+            significance = row['t_test_p_value'] < 0.05
+            color = theme['success'] if significance else theme['danger']
+            status = "Significant" if significance else "Not Significant"
+            
+            st.markdown(f"""
+            <div style='background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; text-align: center; height: 220px; display: flex; flex-direction: column; justify-content: center;'>
+                <h4 style='color: {theme["muted"]}; margin: 0;'>T-Test P-Value</h4>
+                <h2 style='color: {color}; margin: 10px 0;'>{row['t_test_p_value']:.4f}</h2>
+                <p style='color: {color};'>{status}</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col3:
+            significance = row['mannwhitney_p_value'] < 0.05
+            color = theme['success'] if significance else theme['danger']
+            status = "Significant" if significance else "Not Significant"
+            
+            st.markdown(f"""
+            <div style='background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; text-align: center; height: 220px; display: flex; flex-direction: column; justify-content: center;'>
+                <h4 style='color: {theme["muted"]}; margin: 0;'>Mann-Whitney P-Value</h4>
+                <h2 style='color: {color}; margin: 10px 0;'>{row['mannwhitney_p_value']:.4f}</h2>
+                <p style='color: {color};'>{status}</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown("---")
+        
         st.markdown("### 📝 Summary of Findings")
         
         st.warning("""
         **No statistically significant differences found between churned and active customers.**
         
-        All p-values are greater than 0.05 (significance level), indicating that:
-        - Churned and active customers have similar purchase behavior
-        - Early behavioral signals are weak predictors of churn
-        - Transactional data alone may not be sufficient for accurate churn prediction
-        
-        **Implication:** Focus on experimental approaches (A/B testing) rather than predictive modeling for retention strategy.
+        This indicates that early behavioral signals are weak predictors of churn.
+        **Implication:** Focus on experimental approaches (A/B testing) rather than predictive modeling.
         """)
     else:
-        st.error("Statistical test results not available. Please run the analysis pipeline first.")
+        st.error("Statistical test results not available.")
 
 # ============================================================================
 # PAGE: DATA EXPLORER
@@ -812,7 +964,11 @@ elif page == "📋 Data Explorer":
         "Model Coefficients": data['logistic_coef']
     }
     
-    selected_dataset = st.selectbox("Select Dataset", list(dataset_options.keys()))
+    col1, col2 = st.columns([2, 1])
+    with col1:
+        selected_dataset = st.selectbox("Select Dataset", list(dataset_options.keys()))
+    with col2:
+        show_stats = st.checkbox("Show Statistics", value=True)
     
     df = dataset_options[selected_dataset]
     
@@ -828,25 +984,27 @@ elif page == "📋 Data Explorer":
         
         st.markdown("---")
         
-        # Data preview with styling
-        st.markdown("### 📄 Data Preview")
-        st.dataframe(df.head(100), use_container_width=True, height=400)
+        # Search/Filter
+        search = st.text_input("🔍 Search in data:", placeholder="Type to filter...")
         
-        # Column info
-        st.markdown("### 📋 Column Information")
-        col_info = pd.DataFrame({
-            'Column': df.columns,
-            'Type': df.dtypes.astype(str),
-            'Non-Null': df.count().values,
-            'Unique': [df[col].nunique() for col in df.columns]
-        })
-        st.dataframe(col_info, use_container_width=True)
+        if search:
+            mask = df.astype(str).apply(lambda x: x.str.contains(search, case=False)).any(axis=1)
+            display_df = df[mask]
+        else:
+            display_df = df
+        
+        st.markdown("### 📄 Data Preview")
+        st.dataframe(display_df.head(100), use_container_width=True, height=400)
+        
+        if show_stats and len(df.select_dtypes(include=['number']).columns) > 0:
+            st.markdown("### 📊 Quick Statistics")
+            st.dataframe(df.describe(), use_container_width=True)
         
         # Download option
         st.markdown("### 📥 Download Data")
         csv = df.to_csv(index=False)
         st.download_button(
-            label="Download as CSV",
+            label="⬇️ Download as CSV",
             data=csv,
             file_name=f"{selected_dataset.lower().replace(' ', '_')}.csv",
             mime="text/csv"
@@ -858,7 +1016,7 @@ elif page == "📋 Data Explorer":
 # FOOTER
 # ============================================================================
 st.markdown("---")
-st.markdown("""
+st.markdown(f"""
 <div class='footer'>
     <p>📊 Olist E-Commerce Analytics Dashboard | Built with Streamlit & Plotly</p>
     <p>Data Source: <a href='https://www.kaggle.com/olistbr/brazilian-ecommerce' target='_blank'>Olist Brazilian E-Commerce Dataset</a></p>
