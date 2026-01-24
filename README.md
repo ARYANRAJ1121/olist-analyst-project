@@ -146,6 +146,27 @@ Generates business-focused visualizations:
 
 ---
 
+### 8. Interactive Streamlit Dashboard
+**Script:** `app.py`
+
+A comprehensive, interactive dashboard built with Streamlit and Plotly featuring:
+
+- **🏠 Overview Page**: Key KPIs, revenue trends, and retention breakdown
+- **📈 Revenue Analysis**: Monthly trends, YoY comparison, growth metrics
+- **🔄 Retention & Churn**: Order frequency, churn feature comparison, model performance
+- **🧪 A/B Testing**: Conversion rate comparison, statistical significance, lift analysis
+- **🔬 Statistical Analysis**: Hypothesis testing results with visualizations
+- **📋 Data Explorer**: Browse and download all datasets
+
+**To run the dashboard:**
+```bash
+pip install streamlit plotly pandas
+streamlit run app.py
+```
+The dashboard will open at `http://localhost:8501`
+
+---
+
 ## Key Findings
 - ~97% of customers do not make a second purchase
 - Early churn is difficult to predict without leakage

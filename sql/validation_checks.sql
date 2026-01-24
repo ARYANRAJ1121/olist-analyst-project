@@ -37,3 +37,4 @@ WHERE price <= 0;
 SELECT COUNT(*) AS invalid_payments
 FROM payments
 WHERE payment_value <= 0;
+
