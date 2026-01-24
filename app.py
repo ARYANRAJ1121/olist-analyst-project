@@ -103,29 +103,54 @@ st.markdown(f"""
     
     /* ===== SIDEBAR STYLING ===== */
     [data-testid="stSidebar"] {{
-        background: {theme['sidebar_bg']};
-        border-right: 2px solid {theme['primary']}20;
+        background: {theme['sidebar_bg']} !important;
+        border-right: 2px solid rgba(255,255,255,0.2);
     }}
     
+    [data-testid="stSidebar"] > div:first-child {{
+        background: {theme['sidebar_bg']} !important;
+    }}
+    
+    [data-testid="stSidebarContent"] {{
+        background: {theme['sidebar_bg']} !important;
+    }}
+    
+    section[data-testid="stSidebar"] > div {{
+        background: {theme['sidebar_bg']} !important;
+    }}
+    
+    /* Cover the top white patch */
     [data-testid="stSidebar"]::before {{
         content: '';
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, {theme['primary']} 0%, {theme['accent']} 50%, {theme['secondary']} 100%);
+        height: 100%;
+        background: {theme['sidebar_bg']};
+        z-index: -1;
     }}
     
     [data-testid="stSidebar"] .stMarkdown {{
-        color: {theme['text']};
+        color: #ffffff !important;
     }}
     
-    [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3 {{
-        background: linear-gradient(90deg, {theme['primary']} 0%, {theme['accent']} 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+    [data-testid="stSidebar"] .stMarkdown p {{
+        color: #ffffff !important;
+    }}
+    
+    /* Sidebar Headers - WHITE and READABLE */
+    [data-testid="stSidebar"] h1,
+    [data-testid="stSidebar"] h2, 
+    [data-testid="stSidebar"] h3,
+    [data-testid="stSidebar"] .stMarkdown h1,
+    [data-testid="stSidebar"] .stMarkdown h2,
+    [data-testid="stSidebar"] .stMarkdown h3 {{
+        color: #ffffff !important;
+        background: none !important;
+        -webkit-text-fill-color: #ffffff !important;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        font-weight: 700 !important;
     }}
     
     /* Sidebar Radio Buttons */
