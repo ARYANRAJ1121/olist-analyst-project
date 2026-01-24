@@ -101,15 +101,118 @@ st.markdown(f"""
         background: {theme['bg_gradient']};
     }}
     
+    /* ===== SIDEBAR STYLING ===== */
     [data-testid="stSidebar"] {{
         background: {theme['sidebar_bg']};
-        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        border-right: 2px solid {theme['primary']}20;
+    }}
+    
+    [data-testid="stSidebar"]::before {{
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, {theme['primary']} 0%, {theme['accent']} 50%, {theme['secondary']} 100%);
     }}
     
     [data-testid="stSidebar"] .stMarkdown {{
         color: {theme['text']};
     }}
     
+    [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3 {{
+        background: linear-gradient(90deg, {theme['primary']} 0%, {theme['accent']} 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }}
+    
+    /* Sidebar Radio Buttons */
+    [data-testid="stSidebar"] .stRadio > div {{
+        background: transparent;
+    }}
+    
+    [data-testid="stSidebar"] .stRadio label {{
+        color: {theme['text']} !important;
+        padding: 12px 16px !important;
+        border-radius: 12px !important;
+        margin: 4px 0 !important;
+        transition: all 0.3s ease !important;
+        border: 1px solid transparent !important;
+    }}
+    
+    [data-testid="stSidebar"] .stRadio label:hover {{
+        background: {theme['card_bg']} !important;
+        border-color: {theme['primary']}40 !important;
+        transform: translateX(5px);
+    }}
+    
+    [data-testid="stSidebar"] .stRadio label[data-checked="true"] {{
+        background: linear-gradient(90deg, {theme['primary']}30, {theme['secondary']}20) !important;
+        border-color: {theme['primary']} !important;
+        color: {theme['primary']} !important;
+        font-weight: 600 !important;
+    }}
+    
+    [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label span {{
+        color: {theme['text']} !important;
+    }}
+    
+    /* Sidebar Radio Circle Color */
+    [data-testid="stSidebar"] .stRadio div[data-checked="true"] > div:first-child {{
+        background-color: {theme['primary']} !important;
+        border-color: {theme['primary']} !important;
+    }}
+    
+    /* Sidebar Selectbox */
+    [data-testid="stSidebar"] .stSelectbox > div > div {{
+        background: {theme['card_bg']} !important;
+        border: 1px solid {theme['primary']}40 !important;
+        border-radius: 12px !important;
+        color: {theme['text']} !important;
+    }}
+    
+    [data-testid="stSidebar"] .stSelectbox > div > div:hover {{
+        border-color: {theme['primary']} !important;
+        box-shadow: 0 0 15px {theme['primary']}30 !important;
+    }}
+    
+    /* Sidebar Metrics */
+    [data-testid="stSidebar"] [data-testid="stMetric"] {{
+        background: linear-gradient(135deg, {theme['card_bg']}, {theme['primary']}15) !important;
+        border: 1px solid {theme['primary']}30 !important;
+        border-radius: 16px !important;
+        padding: 16px !important;
+        margin: 8px 0 !important;
+    }}
+    
+    [data-testid="stSidebar"] [data-testid="stMetric"]:hover {{
+        border-color: {theme['primary']} !important;
+        box-shadow: 0 5px 25px {theme['primary']}25 !important;
+        transform: translateY(-3px);
+    }}
+    
+    [data-testid="stSidebar"] [data-testid="stMetricValue"] {{
+        color: {theme['primary']} !important;
+        font-size: 1.5rem !important;
+        font-weight: 700 !important;
+    }}
+    
+    [data-testid="stSidebar"] [data-testid="stMetricLabel"] {{
+        color: {theme['muted']} !important;
+        font-size: 0.85rem !important;
+    }}
+    
+    /* Sidebar Divider */
+    [data-testid="stSidebar"] hr {{
+        border: none;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, {theme['primary']}50, transparent);
+        margin: 20px 0;
+    }}
+    
+    /* ===== MAIN CONTENT STYLING ===== */
     h1, h2, h3 {{
         background: linear-gradient(90deg, {theme['primary']} 0%, {theme['accent']} 100%);
         -webkit-background-clip: text;
