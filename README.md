@@ -1,5 +1,15 @@
 # 🛒 Olist E-Commerce Analytics: Retention, Churn & Experimentation
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://olistanalyticsdashboard.streamlit.app/)
+
+## 🚀 Live Dashboard
+
+**👉 [View the Interactive Dashboard](https://olistanalyticsdashboard.streamlit.app/)**
+
+Explore the full analytics with interactive charts, theme customization, and data exploration!
+
+---
+
 ## 🎯 Project Overview
 
 An end-to-end data analytics case study analyzing **100,000+ orders** from Olist, Brazil's largest e-commerce marketplace. This project demonstrates advanced analytical capabilities by tackling a critical business problem: **97% of customers never make a second purchase**.
@@ -209,7 +219,7 @@ Generated publication-ready charts:
 ---
 
 ### 8. Interactive Streamlit Dashboard
-**Script:** `app.py`
+**Script:** `app.py` | **🔗 [Live Demo](https://olistanalyticsdashboard.streamlit.app/)**
 
 A comprehensive, interactive dashboard built with Streamlit and Plotly featuring:
 
@@ -219,8 +229,9 @@ A comprehensive, interactive dashboard built with Streamlit and Plotly featuring
 - **🧪 A/B Testing**: Conversion rate comparison, statistical significance, lift analysis
 - **🔬 Statistical Analysis**: Hypothesis testing results with visualizations
 - **📋 Data Explorer**: Browse and download all datasets
+- **🎨 Theme Customization**: 4 beautiful color themes (Midnight Purple, Ocean Blue, Sunset Vibes, Emerald Dark)
 
-**To run the dashboard:**
+**To run locally:**
 ```bash
 pip install streamlit plotly pandas
 streamlit run app.py
