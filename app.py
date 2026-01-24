@@ -101,6 +101,29 @@ st.markdown(f"""
         background: {theme['bg_gradient']};
     }}
     
+    /* ===== TOP HEADER BAR STYLING ===== */
+    header[data-testid="stHeader"] {{
+        background: {theme['bg_gradient']} !important;
+        backdrop-filter: blur(10px);
+    }}
+    
+    /* Hide the top decoration/toolbar background */
+    .stDeployButton, 
+    [data-testid="stToolbar"],
+    [data-testid="stDecoration"] {{
+        background: transparent !important;
+    }}
+    
+    /* Style the entire top area */
+    .stApp > header {{
+        background: {theme['bg_gradient']} !important;
+    }}
+    
+    /* Remove any white backgrounds from top sections */
+    div[data-testid="stHeader"] > div {{
+        background: transparent !important;
+    }}
+    
     /* ===== SIDEBAR STYLING ===== */
     [data-testid="stSidebar"] {{
         background: {theme['sidebar_bg']} !important;
