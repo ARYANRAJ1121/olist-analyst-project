@@ -4,7 +4,7 @@
 -- Is revenue driven by new customers or repeat customers?
 -- =====================================================
 
--- 1. First purchase date per customer
+-- @block Monthly revenue by customer type (new vs repeat)
 WITH first_purchase AS (
     SELECT
         customer_id,
@@ -14,7 +14,6 @@ WITH first_purchase AS (
     GROUP BY customer_id
 ),
 
--- 2. Tag each order as new or repeat
 order_classification AS (
     SELECT
         o.order_id,
@@ -32,7 +31,6 @@ order_classification AS (
     WHERE o.order_status = 'delivered'
 )
 
--- 3. Monthly revenue by customer type
 SELECT
     oc.order_month,
     oc.customer_type,
