@@ -3,6 +3,7 @@
 -- One row per customer for churn analysis
 -- =====================================================
 
+-- @block Build churn feature table
 WITH customer_orders AS (
     SELECT
         customer_id,
