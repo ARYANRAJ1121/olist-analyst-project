@@ -2,7 +2,7 @@
 -- Statistical Analysis: Churned vs Retained Customers
 -- =====================================================
 
--- 1. Summary statistics by churn status
+-- @block 1. Summary statistics by churn status
 SELECT
     is_churned,
     COUNT(*) AS customers,
@@ -14,7 +14,7 @@ FROM churn_features
 GROUP BY is_churned;
 
 
--- 2. Distribution check (median values)
+-- @block 2. Distribution check (median values)
 SELECT
     is_churned,
     PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY total_orders) AS median_orders,
@@ -24,7 +24,7 @@ FROM churn_features
 GROUP BY is_churned;
 
 
--- 3. Churn rate by order frequency bucket
+-- @block 3. Churn rate by order frequency bucket
 SELECT
     CASE
         WHEN total_orders = 1 THEN '1 order'
@@ -39,7 +39,7 @@ GROUP BY 1
 ORDER BY 1;
 
 
--- 4. Churn rate by revenue bucket
+-- @block 4. Churn rate by revenue bucket
 SELECT
     CASE
         WHEN total_revenue < 100 THEN '<100'
