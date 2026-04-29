@@ -497,8 +497,9 @@ with st.sidebar:
     # Navigation
     page = st.radio(
         "Navigate to:",
-        ["🏠 Overview", "📈 Revenue Analysis", "🔄 Retention & Churn", 
-         "🧪 A/B Testing", "🔬 Statistical Analysis", "📋 Data Explorer"],
+        ["🏠 Overview", "📈 Revenue Analysis", "🔄 Retention & Churn",
+         "🧪 A/B Testing", "🔬 Statistical Analysis", "📋 Data Explorer",
+         "🤖 Ask AI"],
         label_visibility="collapsed"
     )
     
@@ -1162,6 +1163,253 @@ elif page == "📋 Data Explorer":
         )
     else:
         st.error(f"{selected_dataset} data not available.")
+
+# ============================================================================
+# PAGE: ASK AI (Advanced RAG Chat)
+# ============================================================================
+elif page == "🤖 Ask AI":
+    st.markdown("# 🤖 Ask AI")
+    st.markdown("### Ask anything about the Olist analytics project — powered by Advanced RAG")
+    st.markdown("---")
+
+    # ── Pipeline status check ────────────────────────────────────────────────
+    rag_available = False
+    rag_error_msg = ""
+
+    try:
+        import ollama as _ollama
+        _ollama.list()  # ping Ollama server
+        
+        from pinecone import Pinecone as _Pinecone
+        import os as _os
+        from dotenv import load_dotenv
+        
+        # Load environment variables from .env file
+        load_dotenv()
+        
+        _pk = _os.getenv("PINECONE_API_KEY", "")
+        if not _pk:
+            raise ValueError("PINECONE_API_KEY not set in .env file")
+        rag_available = True
+    except Exception as e:
+        rag_error_msg = str(e)
+
+    # ── Status banner ────────────────────────────────────────────────────────
+    col_s1, col_s2, col_s3 = st.columns(3)
+    with col_s1:
+        if rag_available:
+            st.success("🟢 Ollama — Online")
+        else:
+            st.error("🔴 Ollama — Offline")
+    with col_s2:
+        pk_set = bool(os.getenv("PINECONE_API_KEY", ""))
+        if pk_set:
+            st.success("🟢 Pinecone — Configured")
+        else:
+            st.warning("🟡 Pinecone — Key Missing")
+    with col_s3:
+        st.info("🔵 Model — llama3 + nomic-embed")
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # ── Not available fallback ───────────────────────────────────────────────
+    if not rag_available:
+        st.markdown(f"""
+        <div style='
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.4);
+            border-left: 4px solid #ef4444;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        '>
+            <h4 style='color:#ef4444; margin:0 0 8px 0;'>⚠️ RAG Pipeline Not Available</h4>
+            <p style='color: {theme["muted"]}; margin:0;'>
+                <strong>Error:</strong> {rag_error_msg}<br><br>
+                To enable the AI chat:<br>
+                1. Install & start Ollama: <code>ollama serve</code><br>
+                2. Pull required model: <code>ollama pull llama3 && ollama pull nomic-embed-text</code><br>
+                3. Ensure <code>PINECONE_API_KEY</code> is set in your <code>.env</code> file<br>
+                4. Run the indexing script: <code>python rag/test_pipeline.py</code>
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # ── Sample questions ─────────────────────────────────────────────────────
+    st.markdown("### 💡 Sample Questions")
+    sample_qs = [
+        "What is the customer retention rate and why is it so low?",
+        "Why does the churn prediction model only achieve 55% accuracy?",
+        "What were the A/B test results and what is the ROI?",
+        "Explain the data leakage issue in the original churn model.",
+        "What SQL query was used to calculate monthly revenue?",
+        "What are the top business recommendations from this analysis?",
+    ]
+
+    # Display sample questions as clickable pills
+    cols = st.columns(2)
+    for i, q in enumerate(sample_qs):
+        with cols[i % 2]:
+            if st.button(q, key=f"sample_q_{i}", use_container_width=True,
+                         disabled=not rag_available):
+                st.session_state.setdefault("chat_messages", [])
+                st.session_state["pending_question"] = q
+
+    st.markdown("---")
+
+    # ── Chat history ─────────────────────────────────────────────────────────
+    if "chat_messages" not in st.session_state:
+        st.session_state.chat_messages = []
+
+    # Render existing messages
+    for msg in st.session_state.chat_messages:
+        role = msg["role"]
+        content = msg["content"]
+        if role == "user":
+            st.markdown(f"""
+            <div style='
+                background: {theme["card_bg"]};
+                border: 1px solid {theme["primary"]}40;
+                border-radius: 12px 12px 4px 12px;
+                padding: 14px 18px;
+                margin: 8px 0 8px 15%;
+                text-align: right;
+            '>
+                <span style='font-size: 0.8rem; color:{theme["primary"]};'>You</span><br>
+                <span style='color: white;'>{content}</span>
+            </div>
+            """, unsafe_allow_html=True)
+        else:
+            sources = msg.get("sources", "")
+            st.markdown(f"""
+            <div style='
+                background: rgba(255,255,255,0.04);
+                border: 1px solid rgba(255,255,255,0.1);
+                border-radius: 12px 12px 12px 4px;
+                padding: 14px 18px;
+                margin: 8px 15% 8px 0;
+            '>
+                <span style='font-size: 0.8rem; color:{theme["accent"]};'>🤖 AI Analyst</span><br>
+                <span style='color: {theme["muted"]};'>{content}</span>
+                {f'<br><br><span style="font-size:0.75rem; color:{theme["primary"]};">📎 {sources}</span>' if sources else ''}
+            </div>
+            """, unsafe_allow_html=True)
+
+    # ── Input area ───────────────────────────────────────────────────────────
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    with st.form(key="chat_form", clear_on_submit=True):
+        col_inp, col_btn = st.columns([5, 1])
+        with col_inp:
+            user_input = st.text_input(
+                "Ask a question:",
+                placeholder="e.g. Why did the churn model fail? What drove revenue growth?",
+                label_visibility="collapsed",
+                disabled=not rag_available,
+            )
+        with col_btn:
+            submitted = st.form_submit_button(
+                "Send ➤",
+                use_container_width=True,
+                disabled=not rag_available,
+            )
+
+    # Handle sample question injection
+    if "pending_question" in st.session_state:
+        user_input = st.session_state.pop("pending_question")
+        submitted = True
+
+    # ── Run RAG pipeline ─────────────────────────────────────────────────────
+    if submitted and user_input and user_input.strip() and rag_available:
+        st.session_state.chat_messages.append({"role": "user", "content": user_input})
+
+        with st.spinner("🧠 Thinking... (rewriting query → searching → re-ranking → generating)"):
+            try:
+                import sys
+                sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+                from dotenv import load_dotenv
+                load_dotenv()
+
+                from rag.pipeline import OlistRAGPipeline
+                from rag.document_loader import DocumentLoader
+                from rag.indexer import PineconeIndexer
+                from rag.config import INDEX_FILES
+
+                # Initialise pipeline (uses cached BM25 if available)
+                if "rag_pipeline" not in st.session_state:
+                    # Fit BM25 on corpus so retriever can do hybrid search
+                    loader = DocumentLoader()
+                    docs = loader.load_all(INDEX_FILES)
+                    indexer = PineconeIndexer()
+                    all_texts = [doc.content for ns_docs in docs.values() for doc in ns_docs]
+                    indexer.bm25.fit(all_texts)
+                    st.session_state.rag_pipeline = OlistRAGPipeline(
+                        bm25_encoder=indexer.bm25
+                    )
+
+                pipeline = st.session_state.rag_pipeline
+                answer = pipeline.query(user_input)
+
+                # Split answer from sources (generator appends "📎 Sources: ...")
+                sources = ""
+                if "📎 Sources:" in answer:
+                    parts = answer.split("📎 Sources:")
+                    answer_text = parts[0].strip()
+                    sources = "Sources: " + parts[1].strip()
+                else:
+                    answer_text = answer
+
+                st.session_state.chat_messages.append({
+                    "role": "assistant",
+                    "content": answer_text,
+                    "sources": sources,
+                })
+
+            except Exception as e:
+                st.session_state.chat_messages.append({
+                    "role": "assistant",
+                    "content": f"❌ Error running pipeline: {e}\n\nMake sure Ollama is running and Pinecone is indexed.",
+                    "sources": "",
+                })
+
+        st.rerun()
+
+    # ── Clear chat button ────────────────────────────────────────────────────
+    if st.session_state.get("chat_messages"):
+        if st.button("🗑️ Clear Chat", key="clear_chat"):
+            st.session_state.chat_messages = []
+            if "rag_pipeline" in st.session_state:
+                del st.session_state["rag_pipeline"]
+            st.rerun()
+
+    # ── How it works expander ────────────────────────────────────────────────
+    with st.expander("⚙️ How the AI Pipeline Works"):
+        st.markdown(f"""
+        <div style='color: {theme["muted"]};'>
+
+        This chat is powered by an <strong>Advanced RAG (Retrieval-Augmented Generation)</strong> pipeline
+        built specifically for this project. Every question goes through 4 stages:
+
+        **1️⃣ Pre-Retrieval**
+        - <strong>Query Rewriting</strong> — LLM reformulates vague queries into precise, searchable ones
+        - <strong>Multi-Query Generation</strong> — Creates 3 alternative phrasings to capture different angles
+        - <strong>Domain Routing</strong> — Keyword matching routes the query to the right namespace(s):
+          <code>revenue</code>, <code>retention</code>, <code>churn</code>, <code>ab_test</code>, <code>methodology</code>, <code>general</code>
+
+        **2️⃣ Retrieval**
+        - <strong>Hybrid Search</strong> — Combines dense embeddings (semantic) + BM25 sparse vectors (keyword)
+        - <strong>MMR</strong> — Maximal Marginal Relevance diversifies results to avoid redundant chunks
+        - <strong>Cross-Encoder Re-Ranking</strong> — `ms-marco-MiniLM-L-6-v2` scores query-document pairs jointly for precision
+
+        **3️⃣ Post-Retrieval**
+        - <strong>Contextual Compression</strong> — LLM extracts only the relevant sentences from each chunk
+
+        **4️⃣ Generation**
+        - <strong>Domain Prompt Engineering</strong> — System prompt grounds the LLM as an Olist data analyst
+        - <strong>Answer Generation</strong> — `llama3` via Ollama produces the final answer with source citations
+
+        </div>
+        """, unsafe_allow_html=True)
 
 # ============================================================================
 # FOOTER
