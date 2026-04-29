@@ -4,7 +4,7 @@
 -- Which customers have churned based on inactivity?
 -- =====================================================
 
--- Define churn window (90 days)
+-- @block Define churn (90-day inactivity window)
 WITH customer_last_order AS (
     SELECT
         customer_id,
@@ -14,7 +14,6 @@ WITH customer_last_order AS (
     GROUP BY customer_id
 ),
 
--- Check if customer returned within churn window
 churn_flag AS (
     SELECT
         c.customer_id,
