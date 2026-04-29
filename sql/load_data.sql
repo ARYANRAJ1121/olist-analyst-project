@@ -1,56 +1,57 @@
 -- Load Olist raw CSV data into PostgreSQL
 -- Assumes tables already created via schema.sql
+-- NOTE: Update the paths below to match your local data directory
 
--- Customers
+-- @block Load customers
 COPY customers
-FROM '/path/to/data/raw/olist_customers_dataset.csv'
+FROM 'C:/Users/Aryan Raj/OneDrive/Desktop/olist-analyst-project/data/raw/olist_customers_dataset.csv'
 DELIMITER ','
 CSV HEADER;
 
--- Orders
+-- @block Load orders
 COPY orders
-FROM '/path/to/data/raw/olist_orders_dataset.csv'
+FROM 'C:/Users/Aryan Raj/OneDrive/Desktop/olist-analyst-project/data/raw/olist_orders_dataset.csv'
 DELIMITER ','
 CSV HEADER;
 
--- Order Items
+-- @block Load order_items
 COPY order_items
-FROM '/path/to/data/raw/olist_order_items_dataset.csv'
+FROM 'C:/Users/Aryan Raj/OneDrive/Desktop/olist-analyst-project/data/raw/olist_order_items_dataset.csv'
 DELIMITER ','
 CSV HEADER;
 
--- Payments
+-- @block Load payments
 COPY payments
-FROM '/path/to/data/raw/olist_order_payments_dataset.csv'
+FROM 'C:/Users/Aryan Raj/OneDrive/Desktop/olist-analyst-project/data/raw/olist_order_payments_dataset.csv'
 DELIMITER ','
 CSV HEADER;
 
--- Products
+-- @block Load products
 COPY products
-FROM '/path/to/data/raw/olist_products_dataset.csv'
+FROM 'C:/Users/Aryan Raj/OneDrive/Desktop/olist-analyst-project/data/raw/olist_products_dataset.csv'
 DELIMITER ','
 CSV HEADER;
 
--- Sellers
+-- @block Load sellers
 COPY sellers
-FROM '/path/to/data/raw/olist_sellers_dataset.csv'
+FROM 'C:/Users/Aryan Raj/OneDrive/Desktop/olist-analyst-project/data/raw/olist_sellers_dataset.csv'
 DELIMITER ','
 CSV HEADER;
 
--- Reviews
+-- @block Load reviews
 COPY reviews
-FROM '/path/to/data/raw/olist_order_reviews_dataset.csv'
+FROM 'C:/Users/Aryan Raj/OneDrive/Desktop/olist-analyst-project/data/raw/olist_order_reviews_dataset.csv'
 DELIMITER ','
 CSV HEADER;
 
--- Geolocation
+-- @block Load geolocation
 COPY geolocation
-FROM '/path/to/data/raw/olist_geolocation_dataset.csv'
+FROM 'C:/Users/Aryan Raj/OneDrive/Desktop/olist-analyst-project/data/raw/olist_geolocation_dataset.csv'
 DELIMITER ','
 CSV HEADER;
 
--- Category Translation
+-- @block Load category_translation
 COPY category_translation
-FROM '/path/to/data/raw/product_category_name_translation.csv'
+FROM 'C:/Users/Aryan Raj/OneDrive/Desktop/olist-analyst-project/data/raw/product_category_name_translation.csv'
 DELIMITER ','
 CSV HEADER;
