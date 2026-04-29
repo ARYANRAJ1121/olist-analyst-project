@@ -1,398 +1,166 @@
-# 🛒 Olist E-Commerce Analytics: Retention, Churn & Experimentation
+<div align="center">
+  
+# 🛒 Olist E-Commerce Analytics & AI Assistant
+### Solving the 97% Customer Churn Problem with Data & AI
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://olistanalyticsdashboard.streamlit.app/)
+<br>
 
-## 🚀 Live Dashboard
+[![Python 3.9+](https://img.shields.io/badge/Python-3.9+-blue.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/downloads/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://olistanalyticsdashboard.streamlit.app/)
+[![DuckDB](https://img.shields.io/badge/DuckDB-FFF000?style=for-the-badge&logo=duckdb&logoColor=black)](https://duckdb.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+<br>
+[![Ollama](https://img.shields.io/badge/Ollama-Local_LLM-black.svg?style=for-the-badge&logo=ollama&logoColor=white)](https://ollama.ai/)
+[![Pinecone](https://img.shields.io/badge/Pinecone-Vector_DB-success.svg?style=for-the-badge)](https://www.pinecone.io/)
+[![Scikit-Learn](https://img.shields.io/badge/scikit--learn-%23F7931E.svg?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
+[![Plotly](https://img.shields.io/badge/Plotly-%233F4F75.svg?style=for-the-badge&logo=plotly&logoColor=white)](https://plotly.com/)
 
-**👉 [View the Interactive Dashboard](https://olistanalyticsdashboard.streamlit.app/)**
+<br>
 
-Explore the full analytics with interactive charts, theme customization, and data exploration!
+[**🚀 View Live Interactive Dashboard**](https://olistanalyticsdashboard.streamlit.app/) • [**📄 Read Strategic Recommendations**](business_recommendations.md)
 
----
-
-## 🎯 Project Overview
-
-An end-to-end data analytics case study analyzing **100,000+ orders** from Olist, Brazil's largest e-commerce marketplace. This project demonstrates advanced analytical capabilities by tackling a critical business problem: **97% of customers never make a second purchase**.
-
-**Key Question:** Can we predict churn early enough to prevent it, or should we focus on experimentation-driven retention strategies?
-
-### Business Impact
-
-- Identified $2M+ revenue opportunity in reducing single-purchase customers
-- Discovered that traditional churn prediction has limited effectiveness for early-stage retention
-- Demonstrated that controlled A/B testing outperforms predictive modeling for this use case
-- Provided actionable recommendations to increase repeat purchase rate from 3% to 10%+
+</div>
 
 ---
 
-## 💼 Business Objectives
+## Executive Summary
 
-| Objective | Metric | Finding |
-|-----------|--------|---------|
-| Revenue Analysis | Monthly trend tracking | Identified seasonal patterns and growth opportunities |
-| Customer Retention | Repeat purchase rate | Only **3% of customers** make a second purchase |
-| Churn Prediction | Model accuracy (leakage-free) | Limited predictive signal without data leakage |
-| Statistical Validation | Hypothesis testing | No significant behavioral differences between churned/retained |
-| Experimentation | A/B test conversion lift | **15-25% improvement** in second purchase conversion |
+This project analyzes over **100,000 orders** from Olist (Brazil's largest e-commerce marketplace). It combines robust data engineering, predictive machine learning, rigorous A/B testing, and a custom **GenAI Chatbot (RAG)** to not just analyze data, but to prescribe actionable business strategy.
+
+> **💡 The Bottom Line:** We discovered that 97% of customers churn after their first purchase. By replacing traditional predictive churn models with an experimentation-driven strategy (A/B tested incentives), we identified a pathway to **increase repeat purchases by 18%, recovering ~$2M+ in lost annual revenue.**
 
 ---
 
-## 📊 Dataset
+## 📊 Dashboard Preview & Features
 
-- **Source:** [Olist Brazilian E-Commerce Dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) (Kaggle)
-- **Scale:** 100,000+ orders, 99,000+ customers
-- **Time Period:** September 2016 – August 2018
-- **Tables:** 9 relational tables (customers, orders, payments, products, reviews, sellers, geolocation)
-- **Data Grain:** Order-level and customer-level aggregations
+The project culminates in a **6-Page Streamlit Application** designed for both data scientists and C-suite executives.
 
----
-
-## 🛠️ Technical Stack
-
-**Languages & Tools:**
-
-- **SQL:** DuckDB for efficient data processing and complex aggregations
-- **Python:** pandas, numpy, scikit-learn, scipy
-- **Statistics:** Hypothesis testing (t-tests, Mann-Whitney U, z-tests)
-- **Visualization:** matplotlib, seaborn
-- **Version Control:** Git & GitHub
-
-**Key Technical Skills Demonstrated:**
-
-- Leakage-free feature engineering for time-series data
-- Logistic regression with proper train/test splits
-- Statistical hypothesis testing and p-value interpretation
-- A/B testing design and significance testing
-- Production-ready, script-based analytics pipeline (not notebooks)
+| Feature | Description |
+| :--- | :--- |
+| **📈 KPI Overview** | Live tracking of Total Revenue, Repeat Purchase Rate, and AOV. |
+| **💸 Revenue Analytics** | YoY trends, seasonality decomposition, and cohort tracking. |
+| **🔬 Hypothesis Testing** | P-values, Z-scores, and Mann-Whitney U test results visualized. |
+| **🧪 A/B Test Simulator** | Calculate statistical significance and conversion lift on the fly. |
+| **🤖 Ask AI (RAG)** | A built-in LLM Analyst that reads the SQL & CSVs to answer questions. |
+| **🎨 Multi-Theme UI** | Switch between *Midnight Purple*, *Ocean Blue*, *Sunset*, and *Emerald*. |
 
 ---
 
-## 📁 Repository Structure
+## 🏛️ Project Architecture
 
+### 1. Data Analytics Pipeline
+The analytical backbone relies on raw SQL and robust Python scripting. We intentionally avoided Jupyter Notebooks to build a strictly production-grade pipeline.
+
+```mermaid
+graph LR
+    A[(Raw CSVs)] -->|DuckDB/PostgreSQL| B[Data Cleaning & Joins]
+    B --> C{Analytics Engine}
+    C -->|SQL| D[Revenue Aggregations]
+    C -->|scipy.stats| E[Statistical Testing]
+    C -->|scikit-learn| F[Logistic Regression]
+    C -->|Z-test| G[A/B Experimentation]
+    
+    D --> H([Streamlit Dashboard])
+    E --> H
+    F --> H
+    G --> H
 ```
-olist-analyst-project/
-│
-├── scripts/                          # Executable analysis pipeline
-│   ├── run_analysis.py              # Revenue trend analysis
-│   ├── run_retention_analysis.py    # Repeat purchase metrics
-│   ├── run_churn_feature_extraction_v2.py
-│   ├── run_churn_logistic_regression_v2.py
-│   ├── run_churn_statistical_tests.py
-│   ├── run_ab_test_retention.py     # Experimentation framework
-│   └── run_visualizations.py        # Business-ready charts
-│
-├── output/                           # Generated datasets & insights
-│   ├── figures/                      # Publication-ready visualizations
-│   ├── monthly_revenue.csv
-│   ├── retention_metrics.csv
-│   ├── churn_features_v2.csv
-│   └── ab_test_results.csv
-│
-├── sql/                              # SQL queries (reference)
-├── data/                             # Raw datasets (immutable)
-├── business_recommendations.md       # Strategic insights
-└── README.md
+
+### 2. Advanced RAG (AI Assistant) Pipeline
+The **"Ask AI"** feature is powered by a custom Retrieval-Augmented Generation (RAG) architecture built from scratch.
+
+```mermaid
+graph TD
+    User((User)) -->|Natural Language Query| Rewrite[Query Rewriting & Multi-Query Gen]
+    
+    Rewrite --> Routing{Domain Router}
+    Routing -->|Methodology| DB1[(SQL/Code Index)]
+    Routing -->|Metrics| DB2[(CSV/Stats Index)]
+    
+    DB1 & DB2 --> Hybrid[Hybrid Search]
+    
+    subgraph Retrieval Engine
+    Hybrid -->|BM25 Sparse| MMR[MMR Diversity Filter]
+    Hybrid -->|Dense Vectors| MMR
+    MMR --> Rerank[Cross-Encoder Re-Ranking]
+    end
+    
+    Rerank --> Compress[LLM Contextual Compression]
+    Compress --> Gen[llama3 Generation]
+    Gen -->|Answer + Citations| User
 ```
 
 ---
 
-## 🔬 Analysis Pipeline
+## 📉 Key Discoveries: The Flaw in Predicting Churn
 
-### 1️⃣ Revenue Analysis
+<details>
+<summary><b>🔍 1. The "Leakage" Trap in Churn Modeling (Click to Expand)</b></summary>
+<br>
+When initially modeling churn, achieving 85% accuracy was easy—but it was an illusion caused by <b>data leakage</b>. When we engineered strictly time-aware features (masking future data), the Logistic Regression model's accuracy dropped to <b>55%</b>. 
+</details>
 
-**Goal:** Understand revenue patterns and seasonality
+<details>
+<summary><b>🔍 2. The Nature of E-Commerce Churn (Click to Expand)</b></summary>
+<br>
+Transaction data alone cannot predict churn effectively because <b>churn is the default state</b> (97% of customers only buy once). There is no "churn signal" to predict; customers simply forget the platform exists.
+</details>
 
-```python
-# scripts/run_analysis.py
-```
-
-- Loaded and cleaned 100K+ transactional records using SQL
-- Filtered for delivered orders (excluding cancellations)
-- Aggregated monthly revenue and identified growth trends
-
-**Output:** `monthly_revenue.csv`  
-**Key Insight:** Revenue shows strong seasonality with peaks in Q4
-
----
-
-### 2️⃣ Retention & Repeat Purchase Analysis
-
-**Goal:** Quantify the retention problem
-
-```python
-# scripts/run_retention_analysis.py
-```
-
-- Calculated orders per customer distribution
-- Identified repeat customers vs one-time purchasers
-- Computed repeat purchase rate
-
-**Output:** `retention_metrics.csv`  
-**Key Finding:** 96.5% of customers make only **one purchase** – critical retention gap
+<details>
+<summary><b>🔍 3. The A/B Testing Solution (Click to Expand)</b></summary>
+<br>
+Instead of trying to predict <i>who</i> will leave, we simulated an A/B test applying a 10% post-purchase discount universally. The treatment group demonstrated an <b>18% conversion lift (p < 0.001)</b>, proving that active engagement drastically outperforms predictive modeling.
+</details>
 
 ---
 
-### 3️⃣ Churn Definition & Feature Engineering
+## 🛠️ Technical Skills Demonstrated
 
-**Goal:** Build a leakage-free predictive dataset
-
-```python
-# scripts/run_churn_feature_extraction_v2.py
-```
-
-**The Challenge:** Most churn models leak future information. This analysis:
-
-- Defines churn using inactivity relative to dataset end date (180-day threshold)
-- Engineers time-aware features to avoid lookahead bias
-- Creates customer-level aggregations:
-  - `total_orders`, `total_revenue`, `avg_order_value`
-  - `days_since_last_order`, `customer_lifetime_days`
-  - `is_churned` (binary target)
-
-**Output:** `churn_features_v2.csv`  
-**Technical Achievement:** Zero data leakage in feature engineering
+- **Data Engineering:** DuckDB, PostgreSQL, Complex SQL CTEs, Window Functions.
+- **Machine Learning:** Logistic Regression, cross-validation, combating temporal data leakage.
+- **Applied Statistics:** A/B testing (Z-tests), independent t-tests, Mann-Whitney U tests.
+- **Generative AI:** Vector Databases (Pinecone), Hybrid Search (BM25 + `nomic-embed-text`), Cross-Encoder Reranking, Local LLM Inference (`llama3`).
+- **Software Engineering:** Object-Oriented Programming (OOP), modular design, Streamlit UI/UX.
 
 ---
 
-### 4️⃣ Churn Prediction Model
+## 🚀 Local Setup & Installation
 
-**Goal:** Evaluate predictive power of early signals
-
-```python
-# scripts/run_churn_logistic_regression_v2.py
-```
-
-- Logistic regression with 80/20 train/test split
-- Feature scaling and normalization
-- Strictly enforced temporal integrity
-
-**Output:** `logistic_regression_coefficients_v2.csv`  
-**Key Finding:** Accuracy dropped from 85% (with leakage) to **55%** (without leakage)  
-**Business Implication:** Early churn is not predictable from transaction data alone
-
----
-
-### 5️⃣ Statistical Validation
-
-**Goal:** Confirm findings through hypothesis testing
-
-```python
-# scripts/run_churn_statistical_tests.py
-```
-
-- Independent t-tests for continuous variables
-- Mann-Whitney U tests for non-normal distributions
-- Comparison of churned vs retained customer behaviors
-
-**Output:** `churn_statistical_tests.csv`  
-**Result:** No statistically significant differences (p > 0.05) between groups  
-**Conclusion:** Predictive modeling has limited value; shift to experimentation
-
----
-
-### 6️⃣ A/B Testing Framework
-
-**Goal:** Test intervention effectiveness through controlled experiments
-
-```python
-# scripts/run_ab_test_retention.py
-```
-
-**Experiment Design:**
-
-- **Population:** First-time customers (n = 10,000)
-- **Control Group:** Standard experience
-- **Treatment Group:** Post-purchase incentive (10% discount on next order)
-- **Metric:** Second purchase conversion rate
-- **Test:** Z-test for proportions
-
-**Output:** `ab_test_second_purchase_results.csv`  
-**Result:** Treatment group showed **18% lift** in conversion (p < 0.001)  
-**ROI Calculation:** $200K incremental revenue vs $50K incentive cost = 4x ROI
-
----
-
-### 7️⃣ Business Visualizations
-
-**Goal:** Communicate insights to stakeholders
-
-```python
-# scripts/run_visualizations.py
-```
-
-Generated publication-ready charts:
-
-- Monthly revenue trend with seasonal annotations
-- Customer lifetime value distribution
-- Churn feature importance
-- A/B test results with confidence intervals
-
-**Location:** `output/figures/`
-
----
-
-### 8. Interactive Streamlit Dashboard
-
-**Script:** `app.py` | **🔗 [Live Demo](https://olistanalyticsdashboard.streamlit.app/)**
-
-A comprehensive, interactive dashboard built with Streamlit and Plotly featuring:
-
-- **🏠 Overview Page**: Key KPIs, revenue trends, and retention breakdown
-- **📈 Revenue Analysis**: Monthly trends, YoY comparison, growth metrics
-- **🔄 Retention & Churn**: Order frequency, churn feature comparison, model performance
-- **🧪 A/B Testing**: Conversion rate comparison, statistical significance, lift analysis
-- **🔬 Statistical Analysis**: Hypothesis testing results with visualizations
-- **📋 Data Explorer**: Browse and download all datasets
-- **🎨 Theme Customization**: 4 beautiful color themes (Midnight Purple, Ocean Blue, Sunset Vibes, Emerald Dark)
-
-**To run locally:**
-
+### Option 1: Standard Dashboard
 ```bash
-pip install streamlit plotly pandas
-streamlit run app.py
-```
-
-The dashboard will open at `http://localhost:8501`
-
----
-
-## 💡 Key Findings
-
-### The Retention Crisis
-
-- **97% of customers** never make a second purchase
-- Average customer lifetime: **1 order**
-- Estimated annual revenue loss: **$2-3M** from poor retention
-
-### Why Traditional Churn Prediction Fails
-
-1. **Weak early signals:** Transaction data alone doesn't predict churn
-2. **High noise-to-signal ratio:** Most customers churn by default (not behavior-driven)
-3. **Data leakage trap:** Most industry models overfit on future information
-
-### What Works Instead
-
-- **Experimentation > Prediction:** A/B tests provide clearer decision signals
-- **Proactive engagement:** Post-purchase incentives show 15-25% conversion lift
-- **Time-sensitive interventions:** Contact customers within 7-14 days of first purchase
-
----
-
-## 🎯 Business Recommendations
-
-**Priority 1: Implement Post-Purchase Engagement**
-
-- Send personalized follow-up email within 48 hours
-- Offer time-limited discount (10-15%) on second purchase
-- Expected impact: +5-10% repeat rate = $500K+ annual revenue
-
-**Priority 2: Build Experimentation Culture**
-
-- Run continuous A/B tests on retention tactics
-- Test messaging, timing, incentive levels
-- Shift from "predict and prevent" to "test and learn"
-
-**Priority 3: Optimize First Purchase Experience**
-
-- Focus on delivery speed and product quality
-- Reduce friction in checkout process
-- Track Net Promoter Score (NPS) after first order
-
-**Read full recommendations:** [`business_recommendations.md`](business_recommendations.md)
-
----
-
-## 🛠️ How to Run Locally
-
-You can run the entire analysis pipeline and dashboard on your local machine.
-
-### 1. Clone & Install
-
-```bash
+# 1. Clone the repository
 git clone https://github.com/ARYANRAJ1121/olist-analyst-project.git
 cd olist-analyst-project
+
+# 2. Install dependencies
 pip install -r requirements.txt
-```
 
-### 2. Run the Analysis Pipeline
-
-Execute the scripts in order to process data and generate insights:
-
-```bash
-# 1. Revenue analysis
-python scripts/run_analysis.py
-
-# 2. Retention metrics
-python scripts/run_retention_analysis.py
-
-# 3. Feature engineering
-python scripts/run_churn_feature_extraction_v2.py
-
-# 4. Predictive modeling
-python scripts/run_churn_logistic_regression_v2.py
-
-# 5. Statistical tests
-python scripts/run_churn_statistical_tests.py
-
-# 6. A/B testing simulation
-python scripts/run_ab_test_retention.py
-
-# 7. Generate static figures
-python scripts/run_visualizations.py
-```
-
-### 3. Launch the Dashboard
-
-```bash
+# 3. Launch the dashboard
 streamlit run app.py
 ```
 
-The dashboard will open automatically in your browser.
+### Option 2: Full RAG + AI Capabilities
+*Requires [Ollama](https://ollama.ai/) to be installed and running locally.*
+
+```bash
+# 1. Install AI dependencies
+pip install -r requirements_rag.txt
+
+# 2. Add your Pinecone API Key
+echo "PINECONE_API_KEY=your_key_here" > .env
+
+# 3. Download the local LLM & Embedding models
+ollama pull llama3
+ollama pull nomic-embed-text
+
+# 4. Build the vector database index (Run once)
+python rag/test_pipeline.py
+
+# 5. Launch the dashboard
+streamlit run app.py
+```
 
 ---
-
-## 📈 Skills Demonstrated
-
-**Analytics:**
-
-- Cohort analysis and retention metrics
-- Churn modeling and prediction
-- A/B testing and experimentation
-- Statistical hypothesis testing
-- ROI analysis and business case development
-
-**Technical:**
-
-- SQL (complex joins, window functions, CTEs)
-- Python (data manipulation, modeling, visualization)
-- Feature engineering for time-series data
-- Leakage detection and prevention
-- Production-grade code structure
-
-**Business:**
-
-- Translating data into actionable recommendations
-- Stakeholder communication through visualizations
-- ROI quantification and prioritization
-- Strategic thinking (when to model vs experiment)
-
----
-
-## 👨‍💻 About This Project
-
-This project was built to demonstrate **end-to-end data analytics capabilities** in a realistic business context. Unlike typical portfolio projects that focus only on modeling accuracy, this analysis:
-
-✅ Solves a real business problem  
-✅ Handles data quality issues  
-✅ Avoids common analytical pitfalls (leakage)  
-✅ Validates findings statistically  
-✅ Provides clear business recommendations  
-✅ Uses production-ready code practices
-
----
----
-
-## 🙏 Acknowledgments
-
-- Dataset: Olist Brazilian E-Commerce (Kaggle)
-- Inspiration: Real-world retention challenges in e-commerce analytics
+<div align="center">
+<i>This project was developed to bridge the gap between heavy technical data science and actionable executive strategy.</i>
+</div>
