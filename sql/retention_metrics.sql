@@ -4,7 +4,7 @@
 -- How frequently do customers return and how strong is retention?
 -- =====================================================
 
--- 1. Orders per customer
+-- @block 1. Repeat purchase rate
 WITH customer_orders AS (
     SELECT
         customer_id,
@@ -14,7 +14,6 @@ WITH customer_orders AS (
     GROUP BY customer_id
 ),
 
--- 2. Repeat purchase rate
 repeat_rate AS (
     SELECT
         COUNT(CASE WHEN total_orders > 1 THEN 1 END)::DECIMAL
@@ -25,13 +24,22 @@ repeat_rate AS (
 SELECT * FROM repeat_rate;
 
 
--- 3. Average orders per customer
+-- @block 2. Average orders per customer
+WITH customer_orders AS (
+    SELECT
+        customer_id,
+        COUNT(DISTINCT order_id) AS total_orders
+    FROM orders
+    WHERE order_status = 'delivered'
+    GROUP BY customer_id
+)
+
 SELECT
     ROUND(AVG(total_orders), 2) AS avg_orders_per_customer
 FROM customer_orders;
 
 
--- 4. Average time between orders (in days)
+-- @block 3. Average time between orders (in days)
 WITH ordered_events AS (
     SELECT
         customer_id,
