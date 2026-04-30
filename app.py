@@ -1169,51 +1169,75 @@ elif page == "📋 Data Explorer":
 # ============================================================================
 elif page == "🤖 Ask AI":
     st.markdown("# 🤖 Ask AI")
-    st.markdown("### Ask anything about the Olist analytics project — powered by Advanced RAG")
+    st.markdown("### Ask anything about the Olist analytics project — powered by AI")
     st.markdown("---")
 
-    # ── Pipeline status check ────────────────────────────────────────────────
-    rag_available = False
-    rag_error_msg = ""
+    # ── Backend detection ─────────────────────────────────────────────────────
+    # Try to load secrets from Streamlit Cloud or .env
+    try:
+        from dotenv import load_dotenv
+        load_dotenv()
+    except ImportError:
+        pass
 
+    # Also try streamlit secrets (for Streamlit Cloud)
+    try:
+        if hasattr(st, 'secrets'):
+            for key in ["GROQ_API_KEY", "PINECONE_API_KEY"]:
+                if key in st.secrets and not os.getenv(key):
+                    os.environ[key] = st.secrets[key]
+    except Exception:
+        pass
+
+    groq_key = os.getenv("GROQ_API_KEY", "")
+    pinecone_key = os.getenv("PINECONE_API_KEY", "")
+
+    # Check Ollama availability
+    ollama_online = False
     try:
         import ollama as _ollama
-        _ollama.list()  # ping Ollama server
-        
-        from pinecone import Pinecone as _Pinecone
-        import os as _os
-        from dotenv import load_dotenv
-        
-        # Load environment variables from .env file
-        load_dotenv()
-        
-        _pk = _os.getenv("PINECONE_API_KEY", "")
-        if not _pk:
-            raise ValueError("PINECONE_API_KEY not set in .env file")
-        rag_available = True
-    except Exception as e:
-        rag_error_msg = str(e)
+        _ollama.list()
+        ollama_online = True
+    except Exception:
+        pass
+
+    # Check Groq availability
+    groq_online = bool(groq_key)
+
+    # Determine which backend to use
+    # Priority: Ollama + Pinecone (full RAG) > Groq (cloud context)
+    use_full_rag = ollama_online and bool(pinecone_key)
+    use_groq = groq_online and not use_full_rag
+    ai_available = use_full_rag or use_groq
 
     # ── Status banner ────────────────────────────────────────────────────────
     col_s1, col_s2, col_s3 = st.columns(3)
     with col_s1:
-        if rag_available:
-            st.success("🟢 Ollama — Online")
+        if use_full_rag:
+            st.success("🟢 Full RAG Pipeline")
+        elif use_groq:
+            st.success("🟢 Groq Cloud AI")
         else:
-            st.error("🔴 Ollama — Offline")
+            st.error("🔴 No AI Backend")
     with col_s2:
-        pk_set = bool(os.getenv("PINECONE_API_KEY", ""))
-        if pk_set:
-            st.success("🟢 Pinecone — Configured")
+        if ollama_online:
+            st.success("🟢 Ollama — Online")
+        elif groq_online:
+            st.info("🔵 Groq — Connected")
         else:
-            st.warning("🟡 Pinecone — Key Missing")
+            st.warning("🟡 Set GROQ_API_KEY")
     with col_s3:
-        st.info("🔵 Model — llama3 + nomic-embed")
+        if use_full_rag:
+            st.info("🔵 llama3 + nomic-embed")
+        elif use_groq:
+            st.info("🔵 llama-3.3-70b (Groq)")
+        else:
+            st.info("🔵 No model loaded")
 
     st.markdown("<br>", unsafe_allow_html=True)
 
     # ── Not available fallback ───────────────────────────────────────────────
-    if not rag_available:
+    if not ai_available:
         st.markdown(f"""
         <div style='
             background: rgba(239,68,68,0.1);
@@ -1223,14 +1247,17 @@ elif page == "🤖 Ask AI":
             padding: 20px;
             margin-bottom: 20px;
         '>
-            <h4 style='color:#ef4444; margin:0 0 8px 0;'>⚠️ RAG Pipeline Not Available</h4>
+            <h4 style='color:#ef4444; margin:0 0 8px 0;'>⚠️ AI Chat Not Available</h4>
             <p style='color: {theme["muted"]}; margin:0;'>
-                <strong>Error:</strong> {rag_error_msg}<br><br>
-                To enable the AI chat:<br>
+                To enable the AI chat, set up one of these backends:<br><br>
+                <strong>Option A (Cloud - Recommended):</strong><br>
+                1. Get a free API key from <a href='https://console.groq.com' target='_blank'>console.groq.com</a><br>
+                2. Set <code>GROQ_API_KEY</code> in your <code>.env</code> file or Streamlit Cloud secrets<br><br>
+                <strong>Option B (Local - Full RAG):</strong><br>
                 1. Install & start Ollama: <code>ollama serve</code><br>
-                2. Pull required model: <code>ollama pull llama3 && ollama pull nomic-embed-text</code><br>
-                3. Ensure <code>PINECONE_API_KEY</code> is set in your <code>.env</code> file<br>
-                4. Run the indexing script: <code>python rag/test_pipeline.py</code>
+                2. Pull models: <code>ollama pull llama3 && ollama pull nomic-embed-text</code><br>
+                3. Set <code>PINECONE_API_KEY</code> in your <code>.env</code> file<br>
+                4. Run: <code>python rag/test_pipeline.py</code>
             </p>
         </div>
         """, unsafe_allow_html=True)
@@ -1246,12 +1273,11 @@ elif page == "🤖 Ask AI":
         "What are the top business recommendations from this analysis?",
     ]
 
-    # Display sample questions as clickable pills
     cols = st.columns(2)
     for i, q in enumerate(sample_qs):
         with cols[i % 2]:
             if st.button(q, key=f"sample_q_{i}", use_container_width=True,
-                         disabled=not rag_available):
+                         disabled=not ai_available):
                 st.session_state.setdefault("chat_messages", [])
                 st.session_state["pending_question"] = q
 
@@ -1261,7 +1287,6 @@ elif page == "🤖 Ask AI":
     if "chat_messages" not in st.session_state:
         st.session_state.chat_messages = []
 
-    # Render existing messages
     for msg in st.session_state.chat_messages:
         role = msg["role"]
         content = msg["content"]
@@ -1305,13 +1330,13 @@ elif page == "🤖 Ask AI":
                 "Ask a question:",
                 placeholder="e.g. Why did the churn model fail? What drove revenue growth?",
                 label_visibility="collapsed",
-                disabled=not rag_available,
+                disabled=not ai_available,
             )
         with col_btn:
             submitted = st.form_submit_button(
                 "Send ➤",
                 use_container_width=True,
-                disabled=not rag_available,
+                disabled=not ai_available,
             )
 
     # Handle sample question injection
@@ -1319,38 +1344,41 @@ elif page == "🤖 Ask AI":
         user_input = st.session_state.pop("pending_question")
         submitted = True
 
-    # ── Run RAG pipeline ─────────────────────────────────────────────────────
-    if submitted and user_input and user_input.strip() and rag_available:
+    # ── Run AI pipeline ──────────────────────────────────────────────────────
+    if submitted and user_input and user_input.strip() and ai_available:
         st.session_state.chat_messages.append({"role": "user", "content": user_input})
 
-        with st.spinner("🧠 Thinking... (rewriting query → searching → re-ranking → generating)"):
+        with st.spinner("🧠 Thinking..."):
             try:
                 import sys
                 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-                from dotenv import load_dotenv
-                load_dotenv()
 
-                from rag.pipeline import OlistRAGPipeline
-                from rag.document_loader import DocumentLoader
-                from rag.indexer import PineconeIndexer
-                from rag.config import INDEX_FILES
+                if use_full_rag:
+                    # ── Full RAG pipeline (local Ollama + Pinecone) ──
+                    from rag.pipeline import OlistRAGPipeline
+                    from rag.document_loader import DocumentLoader
+                    from rag.indexer import PineconeIndexer
+                    from rag.config import INDEX_FILES
 
-                # Initialise pipeline (uses cached BM25 if available)
-                if "rag_pipeline" not in st.session_state:
-                    # Fit BM25 on corpus so retriever can do hybrid search
-                    loader = DocumentLoader()
-                    docs = loader.load_all(INDEX_FILES)
-                    indexer = PineconeIndexer()
-                    all_texts = [doc.content for ns_docs in docs.values() for doc in ns_docs]
-                    indexer.bm25.fit(all_texts)
-                    st.session_state.rag_pipeline = OlistRAGPipeline(
-                        bm25_encoder=indexer.bm25
-                    )
+                    if "rag_pipeline" not in st.session_state:
+                        loader = DocumentLoader()
+                        docs = loader.load_all(INDEX_FILES)
+                        indexer = PineconeIndexer()
+                        all_texts = [doc.content for ns_docs in docs.values() for doc in ns_docs]
+                        indexer.bm25.fit(all_texts)
+                        st.session_state.rag_pipeline = OlistRAGPipeline(
+                            bm25_encoder=indexer.bm25
+                        )
 
-                pipeline = st.session_state.rag_pipeline
-                answer = pipeline.query(user_input)
+                    pipeline = st.session_state.rag_pipeline
+                    answer = pipeline.query(user_input)
 
-                # Split answer from sources (generator appends "📎 Sources: ...")
+                elif use_groq:
+                    # ── Groq cloud backend (no Ollama needed) ──
+                    from rag.groq_backend import groq_answer
+                    answer = groq_answer(user_input, groq_key)
+
+                # Split answer from sources
                 sources = ""
                 if "📎 Sources:" in answer:
                     parts = answer.split("📎 Sources:")
@@ -1368,7 +1396,7 @@ elif page == "🤖 Ask AI":
             except Exception as e:
                 st.session_state.chat_messages.append({
                     "role": "assistant",
-                    "content": f"❌ Error running pipeline: {e}\n\nMake sure Ollama is running and Pinecone is indexed.",
+                    "content": f"❌ Error: {e}",
                     "sources": "",
                 })
 
