@@ -12,10 +12,10 @@
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![Plotly](https://img.shields.io/badge/Plotly-3F4F75?style=for-the-badge&logo=plotly&logoColor=white)](https://plotly.com/)
 <br>
+[![Groq](https://img.shields.io/badge/Groq-F55036?style=for-the-badge&logo=groq&logoColor=white)](https://groq.com/)
 [![Ollama](https://img.shields.io/badge/Ollama-000000?style=for-the-badge&logo=ollama&logoColor=white)](https://ollama.ai/)
 [![Pinecone](https://img.shields.io/badge/Pinecone-00C853?style=for-the-badge)](https://www.pinecone.io/)
 [![Scikit-Learn](https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
-[![Sentence Transformers](https://img.shields.io/badge/Cross--Encoder-Reranking-blueviolet?style=for-the-badge)](https://www.sbert.net/)
 
 <br>
 
@@ -156,9 +156,14 @@ Based on the full analysis pipeline, here's the recommended playbook:
 
 ---
 
-## 🤖 AI Data Analyst (Advanced RAG)
+## 🤖 AI Data Analyst (Dual Backend)
 
-The dashboard includes a built-in **AI Assistant** that lets anyone — stakeholders, product managers, executives — ask natural language questions about the data and get instant, cited answers.
+The dashboard includes a built-in **AI Assistant** with **two backends** that auto-switches depending on the environment:
+
+| Environment | Backend | Model | How it Works |
+| :--- | :--- | :--- | :--- |
+| **Streamlit Cloud** | Groq (Cloud API) | `llama-3.3-70b-versatile` | Loads all project CSVs into context, answers via Groq |
+| **Local** | Ollama + Pinecone | `llama3` + `nomic-embed-text` | Full Advanced RAG pipeline with hybrid search |
 
 **Example prompts:**
 - *"What is our customer retention rate?"*
@@ -220,6 +225,7 @@ olist-analyst-project/
 │
 ├── rag/                                # Advanced RAG Pipeline
 │   ├── config.py                       # Pinecone, Ollama & retrieval settings
+│   ├── groq_backend.py                 # Groq cloud fallback (Streamlit Cloud)
 │   ├── document_loader.py              # CSV/SQL/Python/Markdown chunkers
 │   ├── indexer.py                      # BM25 encoder + Pinecone hybrid indexer
 │   ├── pre_retrieval.py                # Query rewriting, multi-query, routing
@@ -274,7 +280,20 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-### Option 2: Full Stack (Dashboard + AI Chatbot)
+### Option 2: Dashboard + AI Chat (Cloud — Easiest)
+
+Requires a free [Groq](https://console.groq.com/) API key (30 seconds to get).
+
+```bash
+pip install -r requirements.txt
+
+# Add your free Groq API key
+echo "GROQ_API_KEY=your_groq_key_here" > .env
+
+streamlit run app.py
+```
+
+### Option 3: Full RAG Pipeline (Local — Advanced)
 
 Requires [Ollama](https://ollama.ai/) and a free [Pinecone](https://pinecone.io/) account.
 
@@ -283,8 +302,9 @@ Requires [Ollama](https://ollama.ai/) and a free [Pinecone](https://pinecone.io/
 pip install -r requirements.txt
 pip install -r requirements_rag.txt
 
-# Configure API key
-echo "PINECONE_API_KEY=your_key_here" > .env
+# Configure API keys
+echo "PINECONE_API_KEY=your_key_here" >> .env
+echo "GROQ_API_KEY=your_key_here" >> .env
 
 # Download local LLM & embedding models
 ollama pull llama3
@@ -319,7 +339,7 @@ python scripts/run_visualizations.py              # Generate charts
 | **Data Engineering** | DuckDB, PostgreSQL, Complex CTEs, Window Functions, `@block` annotated SQL |
 | **Machine Learning** | Logistic Regression, Feature Scaling, Temporal Train/Test Splits, Data Leakage Prevention |
 | **Statistics** | A/B Testing (Z-test), Independent t-tests, Mann-Whitney U, p-value Interpretation |
-| **Generative AI / RAG** | Pinecone Vector DB, BM25 Sparse Vectors, Ollama Embeddings, Cross-Encoder Reranking, Contextual Compression, Prompt Engineering |
+| **Generative AI / RAG** | Pinecone Vector DB, BM25 Sparse Vectors, Groq Cloud LLM, Ollama Local LLM, Cross-Encoder Reranking, Contextual Compression, Prompt Engineering |
 | **Application Dev** | Streamlit Multi-page Architecture, Session State, Plotly Visualizations, 4-Theme UI System |
 | **Software Engineering** | Modular OOP Design, Production-grade Scripts (no notebooks), `.env` Configuration, Git Version Control |
 
