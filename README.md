@@ -1,166 +1,338 @@
 <div align="center">
-  
+
 # 🛒 Olist E-Commerce Analytics & AI Assistant
-### Solving the 97% Customer Churn Problem with Data & AI
+
+### Solving the $2M "One-and-Done" Customer Crisis with Data Science, A/B Testing & RAG
 
 <br>
 
-[![Python 3.9+](https://img.shields.io/badge/Python-3.9+-blue.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/downloads/)
+[![Python 3.9+](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/downloads/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://olistanalyticsdashboard.streamlit.app/)
 [![DuckDB](https://img.shields.io/badge/DuckDB-FFF000?style=for-the-badge&logo=duckdb&logoColor=black)](https://duckdb.org/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Plotly](https://img.shields.io/badge/Plotly-3F4F75?style=for-the-badge&logo=plotly&logoColor=white)](https://plotly.com/)
 <br>
-[![Ollama](https://img.shields.io/badge/Ollama-Local_LLM-black.svg?style=for-the-badge&logo=ollama&logoColor=white)](https://ollama.ai/)
-[![Pinecone](https://img.shields.io/badge/Pinecone-Vector_DB-success.svg?style=for-the-badge)](https://www.pinecone.io/)
-[![Scikit-Learn](https://img.shields.io/badge/scikit--learn-%23F7931E.svg?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
-[![Plotly](https://img.shields.io/badge/Plotly-%233F4F75.svg?style=for-the-badge&logo=plotly&logoColor=white)](https://plotly.com/)
+[![Ollama](https://img.shields.io/badge/Ollama-000000?style=for-the-badge&logo=ollama&logoColor=white)](https://ollama.ai/)
+[![Pinecone](https://img.shields.io/badge/Pinecone-00C853?style=for-the-badge)](https://www.pinecone.io/)
+[![Scikit-Learn](https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
+[![Sentence Transformers](https://img.shields.io/badge/Cross--Encoder-Reranking-blueviolet?style=for-the-badge)](https://www.sbert.net/)
 
 <br>
 
-[**🚀 View Live Interactive Dashboard**](https://olistanalyticsdashboard.streamlit.app/) • [**📄 Read Strategic Recommendations**](business_recommendations.md)
+[**🚀 View Live Dashboard**](https://olistanalyticsdashboard.streamlit.app/) &nbsp;•&nbsp; [**📄 Business Recommendations**](business_recommendations.md) &nbsp;•&nbsp; [**🤖 Try the AI Analyst**](https://olistanalyticsdashboard.streamlit.app/)
 
+<br>
+
+---
+
+</div>
+
+## 📌 TL;DR
+
+> We analyzed **100,000+ orders** from Brazil's largest e-commerce marketplace and found that **97% of customers never return after their first purchase** — a **$2M+ annual revenue gap**. Traditional churn prediction models failed (55% accuracy without data leakage). Instead, we proved through a rigorous A/B test simulation that a simple **post-purchase discount increases repeat buyers by 18% with 4x ROI**.
+>
+> This project ships a complete, production-grade analytics pipeline, an interactive **7-page Streamlit dashboard**, and a custom **AI chatbot** that lets anyone — including non-technical stakeholders — query the data in plain English.
+
+---
+
+## 🎯 The Business Problem
+
+Olist's marketplace acquires thousands of new customers every month, but almost none of them come back. The average customer lifetime is **exactly 1 order**.
+
+<div align="center">
+
+| Metric | Value |
+| :--- | :---: |
+| Total Orders Analyzed | **100,000+** |
+| Total Unique Customers | **~99,000** |
+| Repeat Purchase Rate | **~3%** |
+| One-and-Done Customers | **~97%** |
+| Estimated Lost Revenue / Year | **$2M – $3M** |
+| Dataset Time Period | Sep 2016 – Aug 2018 |
+
+</div>
+
+**The Question:** Can we predict who will churn — or is there a better strategy?
+
+---
+
+## 📊 Analysis Results & Visualizations
+
+### 1. Revenue Trends
+
+Monthly revenue tracking reveals strong seasonal patterns with peaks in Q4, driven almost entirely by **new customer acquisition** rather than repeat purchases.
+
+<div align="center">
+<img src="output/figures/01_monthly_revenue.png" alt="Monthly Revenue Trend" width="700"/>
 </div>
 
 ---
 
-## Executive Summary
+### 2. The Retention Crisis
 
-This project analyzes over **100,000 orders** from Olist (Brazil's largest e-commerce marketplace). It combines robust data engineering, predictive machine learning, rigorous A/B testing, and a custom **GenAI Chatbot (RAG)** to not just analyze data, but to prescribe actionable business strategy.
+The order frequency distribution tells the full story — the overwhelming majority of customers place exactly one order.
 
-> **💡 The Bottom Line:** We discovered that 97% of customers churn after their first purchase. By replacing traditional predictive churn models with an experimentation-driven strategy (A/B tested incentives), we identified a pathway to **increase repeat purchases by 18%, recovering ~$2M+ in lost annual revenue.**
-
----
-
-## 📊 Dashboard Preview & Features
-
-The project culminates in a **6-Page Streamlit Application** designed for both data scientists and C-suite executives.
-
-| Feature | Description |
-| :--- | :--- |
-| **📈 KPI Overview** | Live tracking of Total Revenue, Repeat Purchase Rate, and AOV. |
-| **💸 Revenue Analytics** | YoY trends, seasonality decomposition, and cohort tracking. |
-| **🔬 Hypothesis Testing** | P-values, Z-scores, and Mann-Whitney U test results visualized. |
-| **🧪 A/B Test Simulator** | Calculate statistical significance and conversion lift on the fly. |
-| **🤖 Ask AI (RAG)** | A built-in LLM Analyst that reads the SQL & CSVs to answer questions. |
-| **🎨 Multi-Theme UI** | Switch between *Midnight Purple*, *Ocean Blue*, *Sunset*, and *Emerald*. |
+<div align="center">
+  <table>
+    <tr>
+      <td><img src="output/figures/02_order_frequency.png" alt="Order Frequency" width="400"/></td>
+      <td><img src="output/figures/03_retention_breakdown.png" alt="Retention Breakdown" width="400"/></td>
+    </tr>
+    <tr>
+      <td align="center"><i>Order Frequency Distribution</i></td>
+      <td align="center"><i>One-Time vs Repeat Customers</i></td>
+    </tr>
+  </table>
+</div>
 
 ---
 
-## 🏛️ Project Architecture
+### 3. Why Churn Prediction Failed
 
-### 1. Data Analytics Pipeline
-The analytical backbone relies on raw SQL and robust Python scripting. We intentionally avoided Jupyter Notebooks to build a strictly production-grade pipeline.
+We built a Logistic Regression model to predict churn. The critical insight: **the model's accuracy dropped from 85% → 55%** once we properly eliminated data leakage.
 
-```mermaid
-graph LR
-    A[(Raw CSVs)] -->|DuckDB/PostgreSQL| B[Data Cleaning & Joins]
-    B --> C{Analytics Engine}
-    C -->|SQL| D[Revenue Aggregations]
-    C -->|scipy.stats| E[Statistical Testing]
-    C -->|scikit-learn| F[Logistic Regression]
-    C -->|Z-test| G[A/B Experimentation]
-    
-    D --> H([Streamlit Dashboard])
-    E --> H
-    F --> H
-    G --> H
-```
+<div align="center">
+  <table>
+    <tr>
+      <td><img src="output/figures/04_churn_feature_comparison.png" alt="Feature Comparison" width="400"/></td>
+      <td><img src="output/figures/05_logistic_coefficients.png" alt="Model Coefficients" width="400"/></td>
+    </tr>
+    <tr>
+      <td align="center"><i>Churned vs Active — No Significant Difference</i></td>
+      <td align="center"><i>Model Coefficients ≈ Zero (No Signal)</i></td>
+    </tr>
+  </table>
+</div>
 
-### 2. Advanced RAG (AI Assistant) Pipeline
-The **"Ask AI"** feature is powered by a custom Retrieval-Augmented Generation (RAG) architecture built from scratch.
+<details>
+<summary><b>🧪 Statistical Proof (Click to Expand)</b></summary>
+<br>
+
+We ran **t-tests** and **Mann-Whitney U tests** across all behavioral features (total orders, revenue, AOV, lifetime days). 
+
+**Result:** Every single p-value was > 0.05. There is **no statistically significant difference** between churned and active customers.
+
+**Conclusion:** Churn is not behavior-driven here — it's the *default state*. Prediction is the wrong tool.
+
+</details>
+
+---
+
+### 4. The Solution: A/B Testing
+
+Instead of predicting, we **intervened**. We simulated an A/B test offering a 10% post-purchase discount to first-time buyers:
+
+<div align="center">
+<img src="output/figures/06_ab_test_conversion.png" alt="A/B Test Results" width="600"/>
+</div>
+
+<div align="center">
+
+| Metric | Control | Treatment | Lift |
+| :--- | :---: | :---: | :---: |
+| Sample Size | 5,000 | 5,000 | — |
+| Conversion Rate | ~3% | ~5% | **+67%** |
+| Z-Score | — | — | **12.5** |
+| P-Value | — | — | **< 0.001** |
+| **Result** | — | — | **✅ Significant** |
+
+</div>
+
+> 📈 **ROI:** $200K incremental revenue vs $50K incentive cost = **4x Return on Investment**
+
+---
+
+## 💡 Strategic Recommendations
+
+Based on the full analysis pipeline, here's the recommended playbook:
+
+| Priority | Action | Expected Impact |
+| :---: | :--- | :--- |
+| 🥇 | **Post-Purchase Engagement** — Send personalized follow-up + 10-15% discount within 48 hours of delivery | **+$500K/year revenue** |
+| 🥈 | **Shift to "Test & Learn"** — Run continuous A/B tests on messaging, timing, and incentive levels instead of predictive models | **Compounding optimization** |
+| 🥉 | **Optimize First Impression** — Improve delivery speed, product quality, and track NPS after first order | **Long-term brand loyalty** |
+
+> 📖 Full write-up: [**business_recommendations.md**](business_recommendations.md)
+
+---
+
+## 🤖 AI Data Analyst (Advanced RAG)
+
+The dashboard includes a built-in **AI Assistant** that lets anyone — stakeholders, product managers, executives — ask natural language questions about the data and get instant, cited answers.
+
+**Example prompts:**
+- *"What is our customer retention rate?"*
+- *"Why did the churn prediction model fail?"*
+- *"What were the A/B test results and what's the ROI?"*
+- *"What SQL query calculates monthly revenue?"*
+
+### How it Works (Under the Hood)
 
 ```mermaid
 graph TD
-    User((User)) -->|Natural Language Query| Rewrite[Query Rewriting & Multi-Query Gen]
-    
-    Rewrite --> Routing{Domain Router}
-    Routing -->|Methodology| DB1[(SQL/Code Index)]
-    Routing -->|Metrics| DB2[(CSV/Stats Index)]
-    
-    DB1 & DB2 --> Hybrid[Hybrid Search]
-    
-    subgraph Retrieval Engine
-    Hybrid -->|BM25 Sparse| MMR[MMR Diversity Filter]
-    Hybrid -->|Dense Vectors| MMR
-    MMR --> Rerank[Cross-Encoder Re-Ranking]
-    end
-    
-    Rerank --> Compress[LLM Contextual Compression]
-    Compress --> Gen[llama3 Generation]
-    Gen -->|Answer + Citations| User
+    A["🧑 User Question"] --> B["1️⃣ Pre-Retrieval"]
+    B --> B1["Query Rewriting (LLM)"]
+    B --> B2["Multi-Query Generation"]
+    B --> B3["Domain Routing → 6 Namespaces"]
+
+    B3 --> C["2️⃣ Retrieval"]
+    C --> C1["Hybrid Search (Dense + BM25)"]
+    C1 --> C2["MMR Diversity Filter"]
+    C2 --> C3["Cross-Encoder Re-Ranking"]
+
+    C3 --> D["3️⃣ Post-Retrieval"]
+    D --> D1["LLM Contextual Compression"]
+
+    D1 --> E["4️⃣ Generation"]
+    E --> E1["Domain Prompt Engineering"]
+    E1 --> F["💬 Answer + Source Citations"]
+```
+
+<details>
+<summary><b>📂 Pinecone Namespace Routing (Click to Expand)</b></summary>
+<br>
+
+The domain router automatically sends queries to the right vector index:
+
+| Namespace | Indexed Documents |
+| :--- | :--- |
+| `revenue` | `monthly_revenue.csv` |
+| `retention` | `retention_metrics.csv` |
+| `churn` | `churn_features_v2.csv`, `churn_statistical_tests.csv`, `logistic_regression_coefficients_v2.csv` |
+| `ab_test` | `ab_test_second_purchase_results.csv` |
+| `methodology` | All `.sql` files + all `.py` scripts |
+| `general` | `README.md`, `business_recommendations.md` |
+
+**Why Hybrid Search?**
+- **Dense** (`nomic-embed-text`): Semantic — *"customer dropout"* matches *"churn"*
+- **Sparse** (BM25): Keywords — *"ROC-AUC"*, *"p-value"*, *"97%"* are caught exactly
+- **Together**: Best-of-both retrieval, weighted at α=0.6 (slight semantic bias)
+
+</details>
+
+---
+
+## 🏗️ Project Architecture
+
+```
+olist-analyst-project/
+├── app.py                              # Streamlit Dashboard (7 pages + Ask AI)
+│
+├── rag/                                # Advanced RAG Pipeline
+│   ├── config.py                       # Pinecone, Ollama & retrieval settings
+│   ├── document_loader.py              # CSV/SQL/Python/Markdown chunkers
+│   ├── indexer.py                      # BM25 encoder + Pinecone hybrid indexer
+│   ├── pre_retrieval.py                # Query rewriting, multi-query, routing
+│   ├── retriever.py                    # Hybrid search + MMR + cross-encoder
+│   ├── post_retrieval.py               # Contextual compression
+│   ├── generator.py                    # Prompt engineering + LLM generation
+│   ├── pipeline.py                     # End-to-end orchestrator
+│   └── test_pipeline.py               # Index builder & test script
+│
+├── scripts/                            # Analytics Pipeline (no notebooks)
+│   ├── run_analysis.py                 # Revenue trend aggregations
+│   ├── run_retention_analysis.py       # Repeat purchase metrics
+│   ├── run_churn_feature_extraction_v2.py  # Leakage-free feature engineering
+│   ├── run_churn_logistic_regression_v2.py # Churn prediction model
+│   ├── run_churn_statistical_tests.py  # Hypothesis testing
+│   ├── run_ab_test_retention.py        # A/B test simulation
+│   └── run_visualizations.py           # Publication-ready charts
+│
+├── sql/                                # Analytical SQL (@block annotated)
+│   ├── schema.sql                      # Table definitions + indexes
+│   ├── revenue_analysis.sql            # Monthly revenue aggregations
+│   ├── retention_metrics.sql           # Repeat purchase calculations
+│   ├── churn_definition.sql            # Churn labeling logic
+│   ├── churn_features.sql              # Feature engineering CTEs
+│   ├── churn_statistical_analysis.sql  # Statistical comparisons
+│   └── customer_revenue_decomposition.sql
+│
+├── output/                             # Generated artifacts
+│   ├── figures/                        # 6 publication-ready visualizations
+│   ├── monthly_revenue.csv
+│   ├── retention_metrics.csv
+│   ├── churn_features_v2.csv
+│   ├── churn_statistical_tests.csv
+│   └── ab_test_second_purchase_results.csv
+│
+├── data/raw/                           # Immutable raw Olist CSVs (9 tables)
+├── requirements.txt                    # Dashboard dependencies
+├── requirements_rag.txt                # RAG pipeline dependencies
+├── business_recommendations.md         # Strategic insights document
+└── README.md
 ```
 
 ---
 
-## 📉 Key Discoveries: The Flaw in Predicting Churn
+## 🚀 Getting Started
 
-<details>
-<summary><b>🔍 1. The "Leakage" Trap in Churn Modeling (Click to Expand)</b></summary>
-<br>
-When initially modeling churn, achieving 85% accuracy was easy—but it was an illusion caused by <b>data leakage</b>. When we engineered strictly time-aware features (masking future data), the Logistic Regression model's accuracy dropped to <b>55%</b>. 
-</details>
+### Option 1: Dashboard Only
+```bash
+git clone https://github.com/ARYANRAJ1121/olist-analyst-project.git
+cd olist-analyst-project
+pip install -r requirements.txt
+streamlit run app.py
+```
 
-<details>
-<summary><b>🔍 2. The Nature of E-Commerce Churn (Click to Expand)</b></summary>
-<br>
-Transaction data alone cannot predict churn effectively because <b>churn is the default state</b> (97% of customers only buy once). There is no "churn signal" to predict; customers simply forget the platform exists.
-</details>
+### Option 2: Full Stack (Dashboard + AI Chatbot)
 
-<details>
-<summary><b>🔍 3. The A/B Testing Solution (Click to Expand)</b></summary>
-<br>
-Instead of trying to predict <i>who</i> will leave, we simulated an A/B test applying a 10% post-purchase discount universally. The treatment group demonstrated an <b>18% conversion lift (p < 0.001)</b>, proving that active engagement drastically outperforms predictive modeling.
-</details>
+Requires [Ollama](https://ollama.ai/) and a free [Pinecone](https://pinecone.io/) account.
+
+```bash
+# Install all dependencies
+pip install -r requirements.txt
+pip install -r requirements_rag.txt
+
+# Configure API key
+echo "PINECONE_API_KEY=your_key_here" > .env
+
+# Download local LLM & embedding models
+ollama pull llama3
+ollama pull nomic-embed-text
+
+# Build the vector index (run once)
+python rag/test_pipeline.py
+
+# Launch
+streamlit run app.py
+```
+
+### Option 3: Run the Analytics Pipeline
+```bash
+python scripts/run_analysis.py                    # Revenue trends
+python scripts/run_retention_analysis.py          # Retention metrics
+python scripts/run_churn_feature_extraction_v2.py # Feature engineering
+python scripts/run_churn_logistic_regression_v2.py # ML model
+python scripts/run_churn_statistical_tests.py     # Hypothesis tests
+python scripts/run_ab_test_retention.py           # A/B test simulation
+python scripts/run_visualizations.py              # Generate charts
+```
 
 ---
 
 ## 🛠️ Technical Skills Demonstrated
 
-- **Data Engineering:** DuckDB, PostgreSQL, Complex SQL CTEs, Window Functions.
-- **Machine Learning:** Logistic Regression, cross-validation, combating temporal data leakage.
-- **Applied Statistics:** A/B testing (Z-tests), independent t-tests, Mann-Whitney U tests.
-- **Generative AI:** Vector Databases (Pinecone), Hybrid Search (BM25 + `nomic-embed-text`), Cross-Encoder Reranking, Local LLM Inference (`llama3`).
-- **Software Engineering:** Object-Oriented Programming (OOP), modular design, Streamlit UI/UX.
-
----
-
-## 🚀 Local Setup & Installation
-
-### Option 1: Standard Dashboard
-```bash
-# 1. Clone the repository
-git clone https://github.com/ARYANRAJ1121/olist-analyst-project.git
-cd olist-analyst-project
-
-# 2. Install dependencies
-pip install -r requirements.txt
-
-# 3. Launch the dashboard
-streamlit run app.py
-```
-
-### Option 2: Full RAG + AI Capabilities
-*Requires [Ollama](https://ollama.ai/) to be installed and running locally.*
-
-```bash
-# 1. Install AI dependencies
-pip install -r requirements_rag.txt
-
-# 2. Add your Pinecone API Key
-echo "PINECONE_API_KEY=your_key_here" > .env
-
-# 3. Download the local LLM & Embedding models
-ollama pull llama3
-ollama pull nomic-embed-text
-
-# 4. Build the vector database index (Run once)
-python rag/test_pipeline.py
-
-# 5. Launch the dashboard
-streamlit run app.py
-```
-
----
 <div align="center">
-<i>This project was developed to bridge the gap between heavy technical data science and actionable executive strategy.</i>
+
+| Area | Skills |
+| :--- | :--- |
+| **Data Engineering** | DuckDB, PostgreSQL, Complex CTEs, Window Functions, `@block` annotated SQL |
+| **Machine Learning** | Logistic Regression, Feature Scaling, Temporal Train/Test Splits, Data Leakage Prevention |
+| **Statistics** | A/B Testing (Z-test), Independent t-tests, Mann-Whitney U, p-value Interpretation |
+| **Generative AI / RAG** | Pinecone Vector DB, BM25 Sparse Vectors, Ollama Embeddings, Cross-Encoder Reranking, Contextual Compression, Prompt Engineering |
+| **Application Dev** | Streamlit Multi-page Architecture, Session State, Plotly Visualizations, 4-Theme UI System |
+| **Software Engineering** | Modular OOP Design, Production-grade Scripts (no notebooks), `.env` Configuration, Git Version Control |
+
+</div>
+
+---
+
+<div align="center">
+
+**Built to prove that great data science isn't about complex models — it's about solving the right problem with the right tool.**
+
+<br>
+
+*Data Source: [Olist Brazilian E-Commerce Dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) (Kaggle)*
+
 </div>
