@@ -1374,9 +1374,46 @@ elif page == "🤖 Ask AI":
                     answer = pipeline.query(user_input)
 
                 elif use_groq:
-                    # ── Groq cloud backend (no Ollama needed) ──
-                    from rag.groq_backend import groq_answer
-                    answer = groq_answer(user_input, groq_key)
+                    # ── Groq cloud backend (inline, no rag import needed) ──
+                    from groq import Groq as _GroqClient
+
+                    # Load project context
+                    _base = os.path.dirname(os.path.abspath(__file__))
+                    _context = ""
+                    _data_files = {
+                        "Monthly Revenue": os.path.join(_base, "output", "monthly_revenue.csv"),
+                        "Retention Metrics": os.path.join(_base, "output", "retention_metrics.csv"),
+                        "Churn Stats": os.path.join(_base, "output", "churn_statistical_tests.csv"),
+                        "AB Test Results": os.path.join(_base, "output", "ab_test_second_purchase_results.csv"),
+                        "Model Coefficients": os.path.join(_base, "output", "logistic_regression_coefficients_v2.csv"),
+                        "Recommendations": os.path.join(_base, "business_recommendations.md"),
+                    }
+                    for _label, _path in _data_files.items():
+                        if os.path.exists(_path):
+                            with open(_path, "r", encoding="utf-8") as _f:
+                                _context += f"\n--- {_label} ---\n{_f.read()}\n"
+
+                    _sys_prompt = (
+                        "You are an expert data analyst who built the Olist E-Commerce Analytics project. "
+                        "You analyzed 100K+ orders from Brazil's largest marketplace. "
+                        "97% of customers churn after first purchase. Repeat rate is ~3%. "
+                        "A leakage-free logistic regression got only 55% accuracy. "
+                        "An A/B test with 10% discount showed 18% lift (p<0.001, 4x ROI). "
+                        "Answer based ONLY on the provided data. Cite specific numbers."
+                    )
+
+                    _client = _GroqClient(api_key=groq_key)
+                    _resp = _client.chat.completions.create(
+                        model="llama-3.3-70b-versatile",
+                        messages=[
+                            {"role": "system", "content": _sys_prompt},
+                            {"role": "user", "content": f"DATA:\n{_context}\n\nQUESTION: {user_input}\n\nAnswer:"},
+                        ],
+                        temperature=0.1,
+                        max_tokens=1024,
+                    )
+                    answer = _resp.choices[0].message.content.strip()
+                    answer += "\n\n📎 Sources: monthly_revenue.csv, retention_metrics.csv, churn_statistical_tests.csv, ab_test_results.csv"
 
                 # Split answer from sources
                 sources = ""
