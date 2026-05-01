@@ -91,7 +91,7 @@ theme = THEMES[st.session_state.theme]
 # Dynamic CSS based on theme
 st.markdown(f"""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
     
     * {{
         font-family: 'Inter', sans-serif;
@@ -99,6 +99,26 @@ st.markdown(f"""
     
     .stApp {{
         background: {theme['bg_gradient']};
+        background-attachment: fixed;
+    }}
+    
+    /* ===== ANIMATED BACKGROUND MESH ===== */
+    .stApp::before {{
+        content: '';
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background:
+            radial-gradient(circle at 20% 50%, {theme['primary']}08 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, {theme['accent']}06 0%, transparent 50%),
+            radial-gradient(circle at 50% 80%, {theme['secondary']}05 0%, transparent 50%);
+        animation: meshFloat 15s ease-in-out infinite;
+        pointer-events: none;
+        z-index: 0;
+    }}
+    
+    @keyframes meshFloat {{
+        0%, 100% {{ opacity: 1; }}
+        50% {{ opacity: 0.6; }}
     }}
     
     /* ===== TOP HEADER BAR STYLING ===== */
@@ -326,41 +346,105 @@ st.markdown(f"""
         border-radius: 8px;
     }}
     
+    /* ===== GLASSMORPHIC KPI CARDS ===== */
     .kpi-card {{
-        background: linear-gradient(135deg, {theme['card_bg']} 0%, rgba(255,255,255,0.02) 100%);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: linear-gradient(135deg, {theme['card_bg']} 0%, rgba(255,255,255,0.03) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.12);
         border-radius: 20px;
-        padding: 25px;
+        padding: 28px 20px;
         text-align: center;
-        backdrop-filter: blur(10px);
-        transition: all 0.3s ease;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }}
+    
+    .kpi-card::before {{
+        content: '';
+        position: absolute;
+        top: 0; left: -100%;
+        width: 200%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+        transition: left 0.7s ease;
     }}
     
     .kpi-card:hover {{
-        transform: translateY(-5px);
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px {theme['primary']}15;
+        border-color: {theme['primary']}60;
+    }}
+    
+    .kpi-card:hover::before {{
+        left: 100%;
+    }}
+    
+    .kpi-icon {{
+        width: 52px; height: 52px;
+        border-radius: 14px;
+        display: inline-flex; align-items: center; justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 12px;
+        background: linear-gradient(135deg, {theme['primary']}25, {theme['secondary']}20);
+        border: 1px solid {theme['primary']}30;
     }}
     
     .big-number {{
         font-size: 2.5rem;
-        font-weight: 700;
-        color: {theme['primary']};
+        font-weight: 800;
+        background: linear-gradient(135deg, {theme['primary']}, {theme['accent']});
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1.2;
     }}
     
     .stat-label {{
         color: {theme['muted']};
-        font-size: 0.9rem;
-        margin-top: 5px;
+        font-size: 0.85rem;
+        margin-top: 6px;
+        letter-spacing: 0.02em;
     }}
     
+    .kpi-title {{
+        color: #ffffff;
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin-top: 6px;
+    }}
+    
+    /* ===== INSIGHT CARDS ===== */
     .insight-card {{
-        background: {theme['card_bg']};
+        background: linear-gradient(135deg, {theme['card_bg']}, rgba(255,255,255,0.02));
         border-left: 4px solid {theme['primary']};
-        padding: 20px;
-        border-radius: 0 12px 12px 0;
+        padding: 22px;
+        border-radius: 0 16px 16px 0;
         margin: 15px 0;
+        transition: all 0.3s ease;
     }}
     
+    .insight-card:hover {{
+        transform: translateX(5px);
+        border-left-color: {theme['accent']};
+        box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    }}
+    
+    /* ===== HERO SECTION ===== */
+    .hero-badge {{
+        display: inline-block;
+        padding: 6px 16px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, {theme['primary']}20, {theme['accent']}15);
+        border: 1px solid {theme['primary']}40;
+        color: {theme['primary']};
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+    }}
+    
+    /* ===== PULSE ANIMATION ===== */
     .pulse {{
         animation: pulse 2s infinite;
     }}
@@ -371,36 +455,86 @@ st.markdown(f"""
         100% {{ opacity: 1; }}
     }}
     
+    /* ===== FADE IN ANIMATION ===== */
+    @keyframes fadeInUp {{
+        from {{ opacity: 0; transform: translateY(20px); }}
+        to {{ opacity: 1; transform: translateY(0); }}
+    }}
+    
+    .stMarkdown, [data-testid="stMetric"], .stPlotlyChart {{
+        animation: fadeInUp 0.5s ease-out;
+    }}
+    
+    /* ===== FOOTER ===== */
     .footer {{
         text-align: center;
-        padding: 20px;
+        padding: 30px 20px;
         color: {theme['muted']};
-        font-size: 0.9rem;
+        font-size: 0.85rem;
+        border-top: 1px solid rgba(255,255,255,0.06);
+        margin-top: 40px;
     }}
     
     .footer a {{
         color: {theme['primary']};
         text-decoration: none;
+        transition: color 0.3s;
     }}
     
-    /* Button styling */
+    .footer a:hover {{
+        color: {theme['accent']};
+    }}
+    
+    /* ===== BUTTON STYLING ===== */
     .stButton > button {{
-        background: linear-gradient(90deg, {theme['primary']} 0%, {theme['secondary']} 100%);
+        background: linear-gradient(135deg, {theme['primary']} 0%, {theme['secondary']} 100%);
         border: none;
-        border-radius: 8px;
+        border-radius: 10px;
         color: white;
         font-weight: 600;
-        transition: all 0.3s ease;
+        padding: 10px 24px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 15px {theme['primary']}30;
     }}
     
     .stButton > button:hover {{
-        transform: translateY(-2px);
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 30px {theme['primary']}50;
     }}
     
-    /* Slider styling */
+    .stButton > button:active {{
+        transform: translateY(-1px);
+    }}
+    
+    /* ===== SLIDER ===== */
     .stSlider > div > div {{
         background: linear-gradient(90deg, {theme['primary']} 0%, {theme['secondary']} 100%);
+    }}
+    
+    /* ===== EXPANDER ===== */
+    .streamlit-expanderHeader {{
+        background: rgba(255,255,255,0.03) !important;
+        border-radius: 12px !important;
+        border: 1px solid rgba(255,255,255,0.08) !important;
+    }}
+    
+    .streamlit-expanderHeader:hover {{
+        border-color: {theme['primary']}40 !important;
+    }}
+    
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar {{
+        width: 6px;
+    }}
+    ::-webkit-scrollbar-track {{
+        background: rgba(0,0,0,0.1);
+    }}
+    ::-webkit-scrollbar-thumb {{
+        background: {theme['primary']}50;
+        border-radius: 3px;
+    }}
+    ::-webkit-scrollbar-thumb:hover {{
+        background: {theme['primary']};
     }}
 </style>
 """, unsafe_allow_html=True)
@@ -549,9 +683,9 @@ def create_kpi_card(title, value, subtitle="", icon=""):
     """Create a styled KPI card"""
     return f"""
     <div class='kpi-card'>
-        <div style='font-size: 1.5rem;'>{icon}</div>
+        <div class='kpi-icon'>{icon}</div>
         <div class='big-number'>{value}</div>
-        <div style='color: white; font-weight: 600; margin-top: 5px;'>{title}</div>
+        <div class='kpi-title'>{title}</div>
         <div class='stat-label'>{subtitle}</div>
     </div>
     """
@@ -560,8 +694,13 @@ def create_kpi_card(title, value, subtitle="", icon=""):
 # PAGE: OVERVIEW
 # ============================================================================
 if page == "🏠 Overview":
-    st.markdown("# 🎯 Olist E-Commerce Analytics Dashboard")
-    st.markdown("### Comprehensive analysis of customer retention, churn prediction & experimentation")
+    st.markdown(f"""
+    <div style='margin-bottom: 30px;'>
+        <div class='hero-badge'>Live Analytics Dashboard</div>
+        <h1 style='font-size: 2.6rem; margin: 10px 0 5px 0; background: linear-gradient(135deg, {theme["primary"]}, {theme["accent"]}); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 800;'>Olist E-Commerce Analytics</h1>
+        <p style='color: {theme["muted"]}; font-size: 1.1rem; margin: 0;'>100K+ orders analyzed &bull; Churn prediction &bull; A/B testing &bull; AI-powered insights</p>
+    </div>
+    """, unsafe_allow_html=True)
     
     st.markdown("---")
     
@@ -633,6 +772,7 @@ if page == "🏠 Overview":
             fig.add_annotation(text="One-time", x=0.5, y=0.38, font=dict(size=12, color=theme['muted']), showarrow=False)
             st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
     
+    st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("---")
     
     # Key Findings Section
@@ -641,25 +781,57 @@ if page == "🏠 Overview":
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.info("""
-        **📉 Low Retention Rate**
-        
-        ~97% of customers do not make a second purchase. This indicates significant opportunity for retention improvement.
-        """)
+        st.markdown(f"""
+        <div class='insight-card' style='border-left-color: {theme['danger']};'>
+            <div style='font-size: 2rem; margin-bottom: 8px;'>📉</div>
+            <div style='color: white; font-weight: 700; font-size: 1.05rem; margin-bottom: 8px;'>97% Never Return</div>
+            <div style='color: {theme["muted"]}; font-size: 0.9rem; line-height: 1.5;'>
+                Nearly all customers are one-and-done. This is the single biggest growth opportunity on the platform.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
     
     with col2:
-        st.warning("""
-        **⚠️ Weak Churn Signal**
-        
-        Early churn is difficult to predict without data leakage. Statistical tests confirm limited behavioral separation.
-        """)
+        st.markdown(f"""
+        <div class='insight-card' style='border-left-color: {theme['warning']};'>
+            <div style='font-size: 2rem; margin-bottom: 8px;'>⚠️</div>
+            <div style='color: white; font-weight: 700; font-size: 1.05rem; margin-bottom: 8px;'>Prediction Failed at 55%</div>
+            <div style='color: {theme["muted"]}; font-size: 0.9rem; line-height: 1.5;'>
+                ML churn prediction drops to coin-flip accuracy once data leakage is removed. Churn is the default state, not a signal.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
     
     with col3:
-        st.success("""
-        **✅ Experimentation Works**
-        
-        A/B testing shows +67% lift in second purchase conversion, proving controlled experiments are effective.
-        """)
+        st.markdown(f"""
+        <div class='insight-card' style='border-left-color: {theme['success']};'>
+            <div style='font-size: 2rem; margin-bottom: 8px;'>🧪</div>
+            <div style='color: white; font-weight: 700; font-size: 1.05rem; margin-bottom: 8px;'>A/B Test: 4x ROI</div>
+            <div style='color: {theme["muted"]}; font-size: 0.9rem; line-height: 1.5;'>
+                A 10% post-purchase discount lifted repeat purchases by 67%. $200K revenue vs $50K cost = proven strategy.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # CTA to Ask AI
+    st.markdown(f"""
+    <div style='
+        background: linear-gradient(135deg, {theme["primary"]}15, {theme["accent"]}10);
+        border: 1px solid {theme["primary"]}30;
+        border-radius: 16px;
+        padding: 24px;
+        text-align: center;
+    '>
+        <div style='font-size: 1.1rem; color: white; font-weight: 600; margin-bottom: 6px;'>
+            🤖 Want deeper insights? Try the AI Analyst
+        </div>
+        <div style='color: {theme["muted"]}; font-size: 0.9rem;'>
+            Navigate to <strong>Ask AI</strong> in the sidebar to ask questions about the data in plain English
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 # ============================================================================
 # PAGE: REVENUE ANALYSIS
