@@ -25,60 +25,60 @@ st.set_page_config(
 # Theme configurations
 THEMES = {
     "Midnight Purple": {
-        "bg_gradient": "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
-        "sidebar_bg": "linear-gradient(180deg, #3b2667 0%, #5c3d8c 50%, #7b52a8 100%)",
-        "primary": "#a855f7",
-        "secondary": "#6366f1",
-        "accent": "#ec4899",
-        "success": "#10b981",
-        "warning": "#f59e0b",
-        "danger": "#ef4444",
-        "text": "#ffffff",
-        "muted": "#d8b4fe",
-        "card_bg": "rgba(168, 85, 247, 0.25)",
-        "chart_colors": ["#a855f7", "#6366f1", "#ec4899", "#14b8a6", "#f59e0b"]
-    },
-    "Ocean Blue": {
-        "bg_gradient": "linear-gradient(135deg, #0c1929 0%, #0a2540 50%, #0d3b66 100%)",
-        "sidebar_bg": "linear-gradient(180deg, #0077b6 0%, #0096c7 50%, #00b4d8 100%)",
-        "primary": "#00d4ff",
-        "secondary": "#0099cc",
-        "accent": "#00ff88",
-        "success": "#00ff88",
-        "warning": "#ffcc00",
-        "danger": "#ff5555",
-        "text": "#ffffff",
-        "muted": "#caf0f8",
-        "card_bg": "rgba(0, 212, 255, 0.25)",
-        "chart_colors": ["#00d4ff", "#0099cc", "#00ff88", "#ffcc00", "#ff6b9d"]
-    },
-    "Sunset Vibes": {
-        "bg_gradient": "linear-gradient(135deg, #1a1a2e 0%, #2d1b3d 50%, #44203f 100%)",
-        "sidebar_bg": "linear-gradient(180deg, #f093fb 0%, #f5576c 50%, #ff6b6b 100%)",
-        "primary": "#ff6b6b",
-        "secondary": "#feca57",
-        "accent": "#ff9ff3",
-        "success": "#1dd1a1",
-        "warning": "#feca57",
-        "danger": "#ff6b6b",
-        "text": "#ffffff",
-        "muted": "#ffeef1",
-        "card_bg": "rgba(255, 107, 107, 0.25)",
-        "chart_colors": ["#ff6b6b", "#feca57", "#ff9ff3", "#54a0ff", "#1dd1a1"]
-    },
-    "Emerald Dark": {
-        "bg_gradient": "linear-gradient(135deg, #0f1419 0%, #1a2f23 50%, #234532 100%)",
-        "sidebar_bg": "linear-gradient(180deg, #059669 0%, #10b981 50%, #34d399 100%)",
-        "primary": "#10b981",
-        "secondary": "#34d399",
-        "accent": "#6ee7b7",
-        "success": "#10b981",
+        "bg_gradient": "linear-gradient(135deg, #0a0a0f 0%, #12101e 50%, #0d0f1a 100%)",
+        "sidebar_bg": "linear-gradient(180deg, #110e1f 0%, #1a1530 50%, #0e0c1a 100%)",
+        "primary": "#a78bfa",
+        "secondary": "#818cf8",
+        "accent": "#c084fc",
+        "success": "#34d399",
         "warning": "#fbbf24",
         "danger": "#f87171",
-        "text": "#ffffff",
-        "muted": "#d1fae5",
-        "card_bg": "rgba(16, 185, 129, 0.25)",
-        "chart_colors": ["#10b981", "#34d399", "#6ee7b7", "#fbbf24", "#f87171"]
+        "text": "#e8e6f0",
+        "muted": "#8b85a6",
+        "card_bg": "rgba(30, 25, 50, 0.7)",
+        "chart_colors": ["#a78bfa", "#818cf8", "#c084fc", "#34d399", "#fbbf24", "#f472b6"]
+    },
+    "Cyber Noir": {
+        "bg_gradient": "linear-gradient(135deg, #050508 0%, #0a0e17 50%, #0c111d 100%)",
+        "sidebar_bg": "linear-gradient(180deg, #0a0f1a 0%, #111827 50%, #0a0f1a 100%)",
+        "primary": "#22d3ee",
+        "secondary": "#06b6d4",
+        "accent": "#67e8f9",
+        "success": "#34d399",
+        "warning": "#fbbf24",
+        "danger": "#fb7185",
+        "text": "#e2e8f0",
+        "muted": "#64748b",
+        "card_bg": "rgba(15, 23, 42, 0.75)",
+        "chart_colors": ["#22d3ee", "#06b6d4", "#34d399", "#fbbf24", "#fb7185", "#a78bfa"]
+    },
+    "Neon Ember": {
+        "bg_gradient": "linear-gradient(135deg, #0c0607 0%, #150a0c 50%, #0f0808 100%)",
+        "sidebar_bg": "linear-gradient(180deg, #1a0f0f 0%, #1f1215 50%, #120a0a 100%)",
+        "primary": "#fb923c",
+        "secondary": "#f97316",
+        "accent": "#fbbf24",
+        "success": "#4ade80",
+        "warning": "#fbbf24",
+        "danger": "#ef4444",
+        "text": "#fef2e8",
+        "muted": "#9a8478",
+        "card_bg": "rgba(35, 20, 15, 0.7)",
+        "chart_colors": ["#fb923c", "#f97316", "#fbbf24", "#4ade80", "#ef4444", "#c084fc"]
+    },
+    "Matrix Green": {
+        "bg_gradient": "linear-gradient(135deg, #040806 0%, #081210 50%, #050e0a 100%)",
+        "sidebar_bg": "linear-gradient(180deg, #0a1a12 0%, #0f2418 50%, #081410 100%)",
+        "primary": "#4ade80",
+        "secondary": "#22c55e",
+        "accent": "#86efac",
+        "success": "#4ade80",
+        "warning": "#fbbf24",
+        "danger": "#f87171",
+        "text": "#e2f5e9",
+        "muted": "#5e8a70",
+        "card_bg": "rgba(12, 30, 20, 0.75)",
+        "chart_colors": ["#4ade80", "#22c55e", "#86efac", "#fbbf24", "#f87171", "#22d3ee"]
     }
 }
 
@@ -102,23 +102,25 @@ st.markdown(f"""
         background-attachment: fixed;
     }}
     
-    /* ===== ANIMATED BACKGROUND MESH ===== */
+    /* ===== FUTURISTIC ANIMATED BACKGROUND ===== */
     .stApp::before {{
         content: '';
         position: fixed;
         top: 0; left: 0; right: 0; bottom: 0;
         background:
-            radial-gradient(circle at 20% 50%, {theme['primary']}08 0%, transparent 50%),
-            radial-gradient(circle at 80% 20%, {theme['accent']}06 0%, transparent 50%),
-            radial-gradient(circle at 50% 80%, {theme['secondary']}05 0%, transparent 50%);
-        animation: meshFloat 15s ease-in-out infinite;
+            radial-gradient(ellipse at 15% 50%, {theme['primary']}12 0%, transparent 50%),
+            radial-gradient(ellipse at 85% 20%, {theme['accent']}10 0%, transparent 50%),
+            radial-gradient(ellipse at 50% 85%, {theme['secondary']}08 0%, transparent 50%),
+            radial-gradient(ellipse at 70% 60%, {theme['primary']}06 0%, transparent 40%);
+        animation: meshOrbit 20s ease-in-out infinite alternate;
         pointer-events: none;
         z-index: 0;
     }}
     
-    @keyframes meshFloat {{
-        0%, 100% {{ opacity: 1; }}
-        50% {{ opacity: 0.6; }}
+    @keyframes meshOrbit {{
+        0% {{ opacity: 0.8; filter: hue-rotate(0deg); }}
+        50% {{ opacity: 1; filter: hue-rotate(15deg); }}
+        100% {{ opacity: 0.8; filter: hue-rotate(0deg); }}
     }}
     
     /* ===== TOP HEADER BAR STYLING ===== */
@@ -147,7 +149,7 @@ st.markdown(f"""
     /* ===== SIDEBAR STYLING ===== */
     [data-testid="stSidebar"] {{
         background: {theme['sidebar_bg']} !important;
-        border-right: 2px solid rgba(255,255,255,0.2);
+        border-right: 1px solid {theme['primary']}15;
     }}
     
     [data-testid="stSidebar"] > div:first-child {{
@@ -291,27 +293,31 @@ st.markdown(f"""
     
     [data-testid="stMetric"] {{
         background: {theme['card_bg']};
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.06);
         border-radius: 16px;
         padding: 20px;
-        backdrop-filter: blur(10px);
-        transition: all 0.3s ease;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }}
     
     [data-testid="stMetric"]:hover {{
-        transform: translateY(-5px);
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-        border-color: {theme['primary']};
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 20px {theme['primary']}10;
+        border-color: {theme['primary']}30;
     }}
     
     [data-testid="stMetricValue"] {{
-        color: {theme['primary']} !important;
-        font-size: 2rem !important;
+        color: {theme['text']} !important;
+        font-size: 1.8rem !important;
         font-weight: 700 !important;
     }}
     
     [data-testid="stMetricLabel"] {{
         color: {theme['muted']} !important;
+        font-size: 0.85rem !important;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
     }}
     
     .stTabs [data-baseweb="tab-list"] {{
@@ -348,8 +354,8 @@ st.markdown(f"""
     
     /* ===== GLASSMORPHIC KPI CARDS ===== */
     .kpi-card {{
-        background: linear-gradient(135deg, {theme['card_bg']} 0%, rgba(255,255,255,0.03) 100%);
-        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: {theme['card_bg']};
+        border: 1px solid rgba(255, 255, 255, 0.06);
         border-radius: 20px;
         padding: 28px 20px;
         text-align: center;
@@ -432,16 +438,124 @@ st.markdown(f"""
     /* ===== HERO SECTION ===== */
     .hero-badge {{
         display: inline-block;
-        padding: 6px 16px;
+        padding: 6px 18px;
         border-radius: 999px;
         background: linear-gradient(135deg, {theme['primary']}20, {theme['accent']}15);
-        border: 1px solid {theme['primary']}40;
+        border: 1px solid {theme['primary']}50;
         color: {theme['primary']};
-        font-size: 0.8rem;
+        font-size: 0.78rem;
         font-weight: 600;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
         margin-bottom: 12px;
+        animation: badgeGlow 3s ease-in-out infinite alternate;
+    }}
+    
+    @keyframes badgeGlow {{
+        0% {{ box-shadow: 0 0 5px {theme['primary']}20; }}
+        100% {{ box-shadow: 0 0 20px {theme['primary']}40, 0 0 40px {theme['primary']}15; }}
+    }}
+    
+    /* ===== ANIMATED GRADIENT BORDER ===== */
+    .glow-border {{
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+    }}
+    
+    .glow-border::after {{
+        content: '';
+        position: absolute;
+        top: -2px; left: -2px; right: -2px; bottom: -2px;
+        background: linear-gradient(45deg, 
+            {theme['primary']}, {theme['accent']}, {theme['secondary']}, {theme['primary']});
+        background-size: 400% 400%;
+        border-radius: 22px;
+        z-index: -1;
+        animation: borderRotate 6s linear infinite;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }}
+    
+    .glow-border:hover::after {{
+        opacity: 1;
+    }}
+    
+    @keyframes borderRotate {{
+        0% {{ background-position: 0% 50%; }}
+        50% {{ background-position: 100% 50%; }}
+        100% {{ background-position: 0% 50%; }}
+    }}
+    
+    /* ===== CHAT BUBBLES ===== */
+    .chat-user {{
+        background: linear-gradient(135deg, {theme['card_bg']}, {theme['primary']}15);
+        border: 1px solid {theme['primary']}40;
+        border-radius: 16px 16px 4px 16px;
+        padding: 16px 20px;
+        margin: 10px 0 10px 20%;
+        text-align: right;
+        animation: fadeInUp 0.3s ease-out;
+    }}
+    
+    .chat-ai {{
+        background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.06));
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 16px 16px 16px 4px;
+        padding: 16px 20px;
+        margin: 10px 20% 10px 0;
+        animation: fadeInUp 0.3s ease-out;
+        position: relative;
+    }}
+    
+    .chat-ai::before {{
+        content: '';
+        position: absolute;
+        top: 0; left: 0;
+        width: 3px; height: 100%;
+        background: linear-gradient(180deg, {theme['accent']}, {theme['primary']});
+        border-radius: 3px 0 0 3px;
+    }}
+    
+    /* ===== THINKING ANIMATION ===== */
+    .thinking-dots {{
+        display: inline-flex;
+        gap: 4px;
+    }}
+    .thinking-dots span {{
+        width: 8px; height: 8px;
+        border-radius: 50%;
+        background: {theme['primary']};
+        animation: bounce 1.4s ease-in-out infinite;
+    }}
+    .thinking-dots span:nth-child(2) {{ animation-delay: 0.2s; }}
+    .thinking-dots span:nth-child(3) {{ animation-delay: 0.4s; }}
+    
+    @keyframes bounce {{
+        0%, 100% {{ transform: translateY(0); opacity: 0.4; }}
+        50% {{ transform: translateY(-8px); opacity: 1; }}
+    }}
+    
+    /* ===== STATUS PILL ===== */
+    .status-pill {{
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        backdrop-filter: blur(10px);
+    }}
+    .status-pill.online {{
+        background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(16,185,129,0.05));
+        border: 1px solid rgba(16,185,129,0.4);
+        color: #10b981;
+    }}
+    .status-pill.connected {{
+        background: linear-gradient(135deg, {theme['primary']}15, {theme['primary']}05);
+        border: 1px solid {theme['primary']}40;
+        color: {theme['primary']};
     }}
     
     /* ===== PULSE ANIMATION ===== */
@@ -1340,8 +1454,13 @@ elif page == "📋 Data Explorer":
 # PAGE: ASK AI (Advanced RAG Chat)
 # ============================================================================
 elif page == "🤖 Ask AI":
-    st.markdown("# 🤖 Ask AI")
-    st.markdown("### Ask anything about the Olist analytics project — powered by AI")
+    st.markdown(f"""
+    <div style='margin-bottom: 20px;'>
+        <div class='hero-badge'>AI-Powered Analytics</div>
+        <h1 style='font-size: 2.4rem; margin: 10px 0 5px 0; background: linear-gradient(135deg, {theme["primary"]}, {theme["accent"]}); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 800;'>Ask AI</h1>
+        <p style='color: {theme["muted"]}; font-size: 1rem; margin: 0;'>Ask anything about the Olist analytics project &bull; Powered by Groq + Llama 3.1</p>
+    </div>
+    """, unsafe_allow_html=True)
     st.markdown("---")
 
     # ── Backend detection ─────────────────────────────────────────────────────
@@ -1377,36 +1496,39 @@ elif page == "🤖 Ask AI":
     groq_online = bool(groq_key)
 
     # Determine which backend to use
-    # Priority: Ollama + Pinecone (full RAG) > Groq (cloud context)
-    use_full_rag = ollama_online and bool(pinecone_key)
-    use_groq = groq_online and not use_full_rag
-    ai_available = use_full_rag or use_groq
+    # Priority: Groq (fast cloud) > Ollama + Pinecone (local RAG)
+    use_groq = groq_online
+    use_full_rag = ollama_online and bool(pinecone_key) and not use_groq
+    ai_available = use_groq or use_full_rag
 
     # ── Status banner ────────────────────────────────────────────────────────
-    col_s1, col_s2, col_s3 = st.columns(3)
-    with col_s1:
-        if use_full_rag:
-            st.success("🟢 Full RAG Pipeline")
-        elif use_groq:
-            st.success("🟢 Groq Cloud AI")
+    if ai_available:
+        if use_groq:
+            backend_label = "Groq Cloud AI"
+            model_label = "llama-3.1-8b-instant"
         else:
-            st.error("🔴 No AI Backend")
-    with col_s2:
-        if ollama_online:
-            st.success("🟢 Ollama — Online")
-        elif groq_online:
-            st.info("🔵 Groq — Connected")
-        else:
-            st.warning("🟡 Set GROQ_API_KEY")
-    with col_s3:
-        if use_full_rag:
-            st.info("🔵 llama3 + nomic-embed")
-        elif use_groq:
-            st.info("🔵 llama-3.3-70b (Groq)")
-        else:
-            st.info("🔵 No model loaded")
+            backend_label = "Full RAG Pipeline"
+            model_label = "llama3 + nomic-embed"
+        
+        st.markdown(f"""
+        <div style='display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px;'>
+            <div class='status-pill online'>
+                <span style='width: 8px; height: 8px; border-radius: 50%; background: #10b981; display: inline-block; animation: pulse 2s infinite;'></span>
+                {backend_label}
+            </div>
+            <div class='status-pill connected'>
+                <span style='width: 8px; height: 8px; border-radius: 50%; background: {theme["primary"]}; display: inline-block;'></span>
+                {model_label}
+            </div>
+            <div class='status-pill connected'>
+                ⚡ Instant Responses
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.error("🔴 No AI backend available — set GROQ_API_KEY in .env")
 
-    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("", unsafe_allow_html=True)
 
     # ── Not available fallback ───────────────────────────────────────────────
     if not ai_available:
@@ -1464,31 +1586,18 @@ elif page == "🤖 Ask AI":
         content = msg["content"]
         if role == "user":
             st.markdown(f"""
-            <div style='
-                background: {theme["card_bg"]};
-                border: 1px solid {theme["primary"]}40;
-                border-radius: 12px 12px 4px 12px;
-                padding: 14px 18px;
-                margin: 8px 0 8px 15%;
-                text-align: right;
-            '>
-                <span style='font-size: 0.8rem; color:{theme["primary"]};'>You</span><br>
+            <div class='chat-user'>
+                <span style='font-size: 0.78rem; color:{theme["primary"]}; font-weight: 600;'>You</span><br>
                 <span style='color: white;'>{content}</span>
             </div>
             """, unsafe_allow_html=True)
         else:
             sources = msg.get("sources", "")
             st.markdown(f"""
-            <div style='
-                background: rgba(255,255,255,0.04);
-                border: 1px solid rgba(255,255,255,0.1);
-                border-radius: 12px 12px 12px 4px;
-                padding: 14px 18px;
-                margin: 8px 15% 8px 0;
-            '>
-                <span style='font-size: 0.8rem; color:{theme["accent"]};'>🤖 AI Analyst</span><br>
-                <span style='color: {theme["muted"]};'>{content}</span>
-                {f'<br><br><span style="font-size:0.75rem; color:{theme["primary"]};">📎 {sources}</span>' if sources else ''}
+            <div class='chat-ai'>
+                <span style='font-size: 0.78rem; color:{theme["accent"]}; font-weight: 600;'>🤖 AI Analyst</span><br>
+                <span style='color: {theme["muted"]}; line-height: 1.6;'>{content}</span>
+                {f'<br><br><span style="font-size:0.75rem; color:{theme["primary"]}; opacity: 0.8;">📎 {sources}</span>' if sources else ''}
             </div>
             """, unsafe_allow_html=True)
 
@@ -1547,7 +1656,12 @@ elif page == "🤖 Ask AI":
 
                 elif use_groq:
                     # ── Groq cloud backend (inline, no rag import needed) ──
-                    from groq import Groq as _GroqClient
+                    # Clear any cached failed import
+                    import importlib
+                    if 'groq' in sys.modules and sys.modules['groq'] is None:
+                        del sys.modules['groq']
+                    _groq_mod = importlib.import_module('groq')
+                    _GroqClient = _groq_mod.Groq
 
                     # Load project context
                     _base = os.path.dirname(os.path.abspath(__file__))
@@ -1576,7 +1690,7 @@ elif page == "🤖 Ask AI":
 
                     _client = _GroqClient(api_key=groq_key)
                     _resp = _client.chat.completions.create(
-                        model="llama-3.3-70b-versatile",
+                        model="llama-3.1-8b-instant",
                         messages=[
                             {"role": "system", "content": _sys_prompt},
                             {"role": "user", "content": f"DATA:\n{_context}\n\nQUESTION: {user_input}\n\nAnswer:"},
