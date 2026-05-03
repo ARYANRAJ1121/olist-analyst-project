@@ -22,69 +22,190 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+st.markdown("""
+<style>
+/* === BASE BACKGROUND === */
+.stApp {
+    background: #0a0a0a !important;
+}
+
+/* === MESH ORB LAYER === */
+.stApp::before {
+    content: '';
+    position: fixed;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: rgba(124, 58, 237, 0.22);
+    top: -180px; left: -120px;
+    pointer-events: none;
+    z-index: 0;
+    filter: blur(80px);
+}
+.stApp::after {
+    content: '';
+    position: fixed;
+    width: 450px; height: 450px;
+    border-radius: 50%;
+    background: rgba(56, 189, 248, 0.14);
+    top: 100px; right: -100px;
+    pointer-events: none;
+    z-index: 0;
+    filter: blur(80px);
+}
+
+/* === MAIN CONTENT AREA === */
+.main .block-container {
+    background: transparent !important;
+    padding-top: 2rem;
+}
+
+/* === SIDEBAR === */
+[data-testid="stSidebar"] {
+    background: rgba(10, 10, 10, 0.85) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.07) !important;
+    backdrop-filter: blur(20px) !important;
+}
+[data-testid="stSidebar"] * {
+    color: rgba(255, 255, 255, 0.75) !important;
+}
+
+/* === STAT / METRIC CARDS === */
+[data-testid="stMetric"] {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.11) !important;
+    border-radius: 16px !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    padding: 1.5rem !important;
+    transition: border-color 0.2s ease;
+}
+[data-testid="stMetric"]:hover {
+    border-color: rgba(167, 139, 250, 0.35) !important;
+}
+[data-testid="stMetricValue"] {
+    color: #a78bfa !important;
+    font-size: 2rem !important;
+    font-weight: 600 !important;
+}
+[data-testid="stMetricLabel"] {
+    color: rgba(255, 255, 255, 0.85) !important;
+    font-weight: 500 !important;
+}
+[data-testid="stMetricDelta"] {
+    font-size: 0.8rem !important;
+}
+
+/* === POSITIVE / NEGATIVE DELTAS === */
+[data-testid="stMetricDelta"] svg { display: none; }
+[data-testid="stMetricDelta"][data-direction="up"] {
+    color: #4ade80 !important;
+}
+[data-testid="stMetricDelta"][data-direction="down"] {
+    color: #f87171 !important;
+}
+
+/* === GLASS CONTAINERS (st.container, st.expander) === */
+[data-testid="stVerticalBlock"] > div > div {
+    background: transparent !important;
+}
+.stExpander {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.10) !important;
+    border-radius: 14px !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+/* === CHARTS === */
+[data-testid="stPlotlyChart"] {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.09) !important;
+    border-radius: 14px !important;
+    padding: 1rem !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+/* === HEADINGS === */
+h1 {
+    color: #a78bfa !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.02em !important;
+}
+h2, h3 {
+    color: rgba(255, 255, 255, 0.90) !important;
+    font-weight: 500 !important;
+}
+p, li {
+    color: rgba(255, 255, 255, 0.60) !important;
+}
+
+/* === BADGE / PILL (st.badge or custom markdown badges) === */
+.badge-pill {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 400;
+    color: #a78bfa;
+    background: rgba(167, 139, 250, 0.10);
+    border: 1px solid rgba(167, 139, 250, 0.25);
+    padding: 4px 14px;
+    border-radius: 20px;
+    letter-spacing: 0.04em;
+}
+
+/* === SELECTBOX / DROPDOWN === */
+[data-testid="stSelectbox"] > div {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 10px !important;
+    color: #fff !important;
+}
+
+/* === BUTTONS === */
+.stButton > button {
+    background: rgba(167, 139, 250, 0.15) !important;
+    border: 1px solid rgba(167, 139, 250, 0.35) !important;
+    color: #a78bfa !important;
+    border-radius: 10px !important;
+    font-weight: 500 !important;
+    transition: background 0.2s ease;
+}
+.stButton > button:hover {
+    background: rgba(167, 139, 250, 0.28) !important;
+}
+
+/* === DIVIDERS === */
+hr {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* === DATAFRAMES / TABLES === */
+[data-testid="stDataFrame"] {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.09) !important;
+    border-radius: 12px !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
 # Theme configurations
 THEMES = {
-    "Midnight Purple": {
-        "bg_gradient": "linear-gradient(135deg, #0a0a0f 0%, #12101e 50%, #0d0f1a 100%)",
-        "sidebar_bg": "linear-gradient(180deg, #110e1f 0%, #1a1530 50%, #0e0c1a 100%)",
+    "Glassmorphism Dark Mesh": {
+        "bg_gradient": "#0a0a0a",
+        "sidebar_bg": "rgba(10, 10, 10, 0.8)",
         "primary": "#a78bfa",
-        "secondary": "#818cf8",
-        "accent": "#c084fc",
-        "success": "#34d399",
-        "warning": "#fbbf24",
-        "danger": "#f87171",
-        "text": "#e8e6f0",
-        "muted": "#8b85a6",
-        "card_bg": "rgba(30, 25, 50, 0.7)",
-        "chart_colors": ["#a78bfa", "#818cf8", "#c084fc", "#34d399", "#fbbf24", "#f472b6"]
-    },
-    "Cyber Noir": {
-        "bg_gradient": "linear-gradient(135deg, #050508 0%, #0a0e17 50%, #0c111d 100%)",
-        "sidebar_bg": "linear-gradient(180deg, #0a0f1a 0%, #111827 50%, #0a0f1a 100%)",
-        "primary": "#22d3ee",
-        "secondary": "#06b6d4",
-        "accent": "#67e8f9",
-        "success": "#34d399",
-        "warning": "#fbbf24",
-        "danger": "#fb7185",
-        "text": "#e2e8f0",
-        "muted": "#64748b",
-        "card_bg": "rgba(15, 23, 42, 0.75)",
-        "chart_colors": ["#22d3ee", "#06b6d4", "#34d399", "#fbbf24", "#fb7185", "#a78bfa"]
-    },
-    "Neon Ember": {
-        "bg_gradient": "linear-gradient(135deg, #0c0607 0%, #150a0c 50%, #0f0808 100%)",
-        "sidebar_bg": "linear-gradient(180deg, #1a0f0f 0%, #1f1215 50%, #120a0a 100%)",
-        "primary": "#fb923c",
-        "secondary": "#f97316",
-        "accent": "#fbbf24",
-        "success": "#4ade80",
-        "warning": "#fbbf24",
-        "danger": "#ef4444",
-        "text": "#fef2e8",
-        "muted": "#9a8478",
-        "card_bg": "rgba(35, 20, 15, 0.7)",
-        "chart_colors": ["#fb923c", "#f97316", "#fbbf24", "#4ade80", "#ef4444", "#c084fc"]
-    },
-    "Matrix Green": {
-        "bg_gradient": "linear-gradient(135deg, #040806 0%, #081210 50%, #050e0a 100%)",
-        "sidebar_bg": "linear-gradient(180deg, #0a1a12 0%, #0f2418 50%, #081410 100%)",
-        "primary": "#4ade80",
-        "secondary": "#22c55e",
-        "accent": "#86efac",
+        "secondary": "#38bdf8",
+        "accent": "#a78bfa",
         "success": "#4ade80",
         "warning": "#fbbf24",
         "danger": "#f87171",
-        "text": "#e2f5e9",
-        "muted": "#5e8a70",
-        "card_bg": "rgba(12, 30, 20, 0.75)",
-        "chart_colors": ["#4ade80", "#22c55e", "#86efac", "#fbbf24", "#f87171", "#22d3ee"]
+        "text": "#ffffff",
+        "muted": "#94a3b8",
+        "card_bg": "rgba(255, 255, 255, 0.06)",
+        "chart_colors": ["#a78bfa", "#38bdf8", "#818cf8", "#4ade80", "#fbbf24", "#f87171"]
     }
 }
 
-# Initialize session state
 if 'theme' not in st.session_state:
-    st.session_state.theme = "Midnight Purple"
+    st.session_state.theme = "Glassmorphism Dark Mesh"
 
 theme = THEMES[st.session_state.theme]
 
@@ -108,11 +229,10 @@ st.markdown(f"""
         position: fixed;
         top: 0; left: 0; right: 0; bottom: 0;
         background:
-            radial-gradient(ellipse at 15% 50%, {theme['primary']}12 0%, transparent 50%),
-            radial-gradient(ellipse at 85% 20%, {theme['accent']}10 0%, transparent 50%),
-            radial-gradient(ellipse at 50% 85%, {theme['secondary']}08 0%, transparent 50%),
-            radial-gradient(ellipse at 70% 60%, {theme['primary']}06 0%, transparent 40%);
-        animation: meshOrbit 20s ease-in-out infinite alternate;
+            radial-gradient(ellipse at 15% 20%, rgba(124, 58, 237, 0.28) 0%, transparent 60%),
+            radial-gradient(ellipse at 85% 20%, rgba(56, 189, 248, 0.18) 0%, transparent 50%),
+            radial-gradient(ellipse at 50% 85%, rgba(167, 139, 250, 0.10) 0%, transparent 40%);
+        animation: meshOrbit 25s ease-in-out infinite alternate;
         pointer-events: none;
         z-index: 0;
     }}
@@ -225,11 +345,15 @@ st.markdown(f"""
         font-weight: 600 !important;
     }}
     
-    [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label span {{
+    [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label .stApp {{
         color: {theme['text']} !important;
     }}
     
-    /* Sidebar Radio Circle Color */
+    h1, h2, h3, h4, h5, h6, p, span, div {{
+        color: {theme['text']};
+    }}
+    
+    /* ===== MAIN CONTENT AREA ===== */
     [data-testid="stSidebar"] .stRadio div[data-checked="true"] > div:first-child {{
         background-color: {theme['primary']} !important;
         border-color: {theme['primary']} !important;
@@ -282,7 +406,47 @@ st.markdown(f"""
         margin: 20px 0;
     }}
     
-    /* ===== MAIN CONTENT STYLING ===== */
+    /* Sidebar Navigation Menu (Radio buttons) */
+    [data-testid="stSidebar"] .stRadio > div {{
+        gap: 8px;
+    }}
+    
+    [data-testid="stSidebar"] .stRadio label {{
+        padding: 12px 16px !important;
+        border-radius: 12px !important;
+        transition: all 0.3s ease !important;
+        background: transparent;
+        cursor: pointer;
+        width: 100%;
+        margin: 0;
+        border: 1px solid transparent;
+    }}
+    
+    [data-testid="stSidebar"] .stRadio label:hover {{
+        background: rgba(0,0,0,0.05) !important;
+        border: 1px solid rgba(0,0,0,0.1);
+        transform: translateX(4px);
+    }}
+    
+    [data-testid="stSidebar"] .stRadio div[role="radio"][aria-checked="true"] {{
+        background: none !important;
+    }}
+    
+    /* Hide the radio circle */
+    [data-testid="stSidebar"] .stRadio div[data-testid="stMarkdownContainer"] p {{
+        font-weight: 600 !important;
+        font-size: 1.05rem !important;
+        letter-spacing: 0.02em;
+    }}
+    
+    /* Selected tab styling */
+    [data-testid="stSidebar"] .stRadio label[data-baseweb="radio"]:has(input:checked) {{
+        background: linear-gradient(90deg, {theme['primary']}20, transparent) !important;
+        border-left: 3px solid {theme['primary']} !important;
+        border-radius: 4px 12px 12px 4px !important;
+    }}
+    
+    /* ===== MAIN CONTENT AREA ===== */
     h1, h2, h3 {{
         background: linear-gradient(90deg, {theme['primary']} 0%, {theme['accent']} 100%);
         -webkit-background-clip: text;
@@ -293,18 +457,19 @@ st.markdown(f"""
     
     [data-testid="stMetric"] {{
         background: {theme['card_bg']};
-        border: 1px solid rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.13);
         border-radius: 16px;
         padding: 20px;
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }}
     
     [data-testid="stMetric"]:hover {{
         transform: translateY(-4px);
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 20px {theme['primary']}10;
-        border-color: {theme['primary']}30;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), 0 0 20px {theme['primary']}20;
+        border-color: {theme['primary']}50;
     }}
     
     [data-testid="stMetricValue"] {{
@@ -322,7 +487,7 @@ st.markdown(f"""
     
     .stTabs [data-baseweb="tab-list"] {{
         gap: 8px;
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(0, 0, 0, 0.05);
         border-radius: 12px;
         padding: 8px;
     }}
@@ -341,21 +506,21 @@ st.markdown(f"""
     }}
     
     .stAlert {{
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.5);
+        border: 1px solid rgba(0, 0, 0, 0.1);
         border-radius: 12px;
     }}
     
     .stSelectbox > div > div {{
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.5);
+        border: 1px solid rgba(0, 0, 0, 0.1);
         border-radius: 8px;
     }}
     
     /* ===== GLASSMORPHIC KPI CARDS ===== */
     .kpi-card {{
         background: {theme['card_bg']};
-        border: 1px solid rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.13);
         border-radius: 20px;
         padding: 28px 20px;
         text-align: center;
@@ -364,6 +529,7 @@ st.markdown(f"""
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }}
     
     .kpi-card::before {{
@@ -372,17 +538,30 @@ st.markdown(f"""
         top: 0; left: -100%;
         width: 200%; height: 100%;
         background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-        transition: left 0.7s ease;
+        transform: skewX(-20deg);
+        transition: 0.5s;
+        opacity: 0;
     }}
     
     .kpi-card:hover {{
-        transform: translateY(-8px) scale(1.02);
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px {theme['primary']}15;
-        border-color: {theme['primary']}60;
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 0 20px {theme['primary']}30;
+        border-color: {theme['primary']}50;
     }}
     
     .kpi-card:hover::before {{
         left: 100%;
+        opacity: 1;
+    }}
+    
+    .big-number {{
+        font-size: 2.2rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, {theme['primary']}, {theme['accent']});
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin: 10px 0;
     }}
     
     .kpi-icon {{
@@ -413,7 +592,7 @@ st.markdown(f"""
     }}
     
     .kpi-title {{
-        color: #ffffff;
+        color: {theme['text']};
         font-weight: 600;
         font-size: 0.95rem;
         margin-top: 6px;
@@ -499,13 +678,14 @@ st.markdown(f"""
     }}
     
     .chat-ai {{
-        background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.06));
-        border: 1px solid rgba(255,255,255,0.1);
+        background: {theme['card_bg']};
+        border: 1px solid rgba(255, 255, 255, 0.13);
         border-radius: 16px 16px 16px 4px;
         padding: 16px 20px;
         margin: 10px 20% 10px 0;
         animation: fadeInUp 0.3s ease-out;
         position: relative;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }}
     
     .chat-ai::before {{
@@ -604,7 +784,7 @@ st.markdown(f"""
         background: linear-gradient(135deg, {theme['primary']} 0%, {theme['secondary']} 100%);
         border: none;
         border-radius: 10px;
-        color: white;
+        color: white !important; /* Keep button text white for contrast */
         font-weight: 600;
         padding: 10px 24px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -625,15 +805,65 @@ st.markdown(f"""
         background: linear-gradient(90deg, {theme['primary']} 0%, {theme['secondary']} 100%);
     }}
     
+    /* ===== FUTURISTIC LOADING SCANNER ===== */
+    .stSpinner > div > div {{
+        border-color: transparent !important;
+        background: transparent !important;
+    }}
+    .stSpinner > div {{
+        position: relative;
+        height: 4px;
+        width: 100%;
+        background: rgba(255,255,255,0.05);
+        border-radius: 4px;
+        overflow: hidden;
+    }}
+    .stSpinner > div::after {{
+        content: '';
+        position: absolute;
+        top: 0; left: 0;
+        height: 100%; width: 30%;
+        background: linear-gradient(90deg, transparent, {theme['primary']}, {theme['accent']}, transparent);
+        animation: cyberScan 1.5s ease-in-out infinite;
+    }}
+    
+    @keyframes cyberScan {{
+        0% {{ left: -30%; }}
+        100% {{ left: 100%; }}
+    }}
+    
+    /* Global scanner line that slowly sweeps down the page */
+    .stApp::after {{
+        content: '';
+        position: fixed;
+        top: -10px; left: 0; right: 0;
+        height: 2px;
+        background: {theme['primary']}20;
+        box-shadow: 0 0 20px 5px {theme['primary']}15;
+        animation: globalScan 8s linear infinite;
+        pointer-events: none;
+        z-index: 9999;
+        opacity: 0.5;
+    }}
+    
+    @keyframes globalScan {{
+        0% {{ top: -10px; opacity: 0; }}
+        10% {{ opacity: 0.5; }}
+        90% {{ opacity: 0.5; }}
+        100% {{ top: 100vh; opacity: 0; }}
+    }}
+    
     /* ===== EXPANDER ===== */
     .streamlit-expanderHeader {{
-        background: rgba(255,255,255,0.03) !important;
+        background: rgba(255,255,255,0.02) !important;
         border-radius: 12px !important;
-        border: 1px solid rgba(255,255,255,0.08) !important;
+        border: 1px solid rgba(255,255,255,0.05) !important;
+        backdrop-filter: blur(10px);
     }}
     
     .streamlit-expanderHeader:hover {{
         border-color: {theme['primary']}40 !important;
+        background: rgba(255,255,255,0.04) !important;
     }}
     
     /* ===== SCROLLBAR ===== */
@@ -781,16 +1011,40 @@ with st.sidebar:
 def create_plotly_layout(title="", height=400):
     """Create consistent Plotly layout with current theme"""
     return dict(
-        title=dict(text=title, font=dict(size=20, color='white')),
+        title=dict(text=title, font=dict(size=20, color=theme['text'], family='Inter, sans-serif')),
         paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(255,255,255,0.02)',
-        font=dict(color=theme['muted'], family='Inter'),
+        plot_bgcolor='rgba(0,0,0,0)',
+        font=dict(color=theme['muted'], family='Inter, sans-serif', size=13),
         height=height,
-        margin=dict(l=50, r=50, t=80, b=50),
-        xaxis=dict(gridcolor='rgba(255,255,255,0.05)', zerolinecolor='rgba(255,255,255,0.1)'),
-        yaxis=dict(gridcolor='rgba(255,255,255,0.05)', zerolinecolor='rgba(255,255,255,0.1)'),
-        legend=dict(bgcolor='rgba(0,0,0,0)', font=dict(color='white')),
-        hoverlabel=dict(bgcolor=theme['primary'], font_size=14, font_family='Inter')
+        margin=dict(l=40, r=40, t=60, b=40),
+        xaxis=dict(
+            gridcolor='rgba(0,0,0,0.05)', 
+            zerolinecolor='rgba(0,0,0,0.08)',
+            showline=False,
+            showgrid=True
+        ),
+        yaxis=dict(
+            gridcolor='rgba(0,0,0,0.05)', 
+            zerolinecolor='rgba(0,0,0,0.08)',
+            showline=False,
+            showgrid=True
+        ),
+        legend=dict(
+            bgcolor='rgba(0,0,0,0)', 
+            font=dict(color=theme['text']),
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1
+        ),
+        hoverlabel=dict(
+            bgcolor=theme['card_bg'],
+            font_size=14, 
+            font_family='Inter, sans-serif',
+            bordercolor=theme['primary'],
+            font=dict(color=theme['text'])
+        )
     )
 
 def create_kpi_card(title, value, subtitle="", icon=""):
@@ -810,7 +1064,7 @@ def create_kpi_card(title, value, subtitle="", icon=""):
 if page == "🏠 Overview":
     st.markdown(f"""
     <div style='margin-bottom: 30px;'>
-        <div class='hero-badge'>Live Analytics Dashboard</div>
+        <span class="badge-pill">live analytics dashboard</span>
         <h1 style='font-size: 2.6rem; margin: 10px 0 5px 0; background: linear-gradient(135deg, {theme["primary"]}, {theme["accent"]}); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 800;'>Olist E-Commerce Analytics</h1>
         <p style='color: {theme["muted"]}; font-size: 1.1rem; margin: 0;'>100K+ orders analyzed &bull; Churn prediction &bull; A/B testing &bull; AI-powered insights</p>
     </div>
@@ -851,18 +1105,36 @@ if page == "🏠 Overview":
         st.markdown("### 📈 Revenue Trend")
         if data['monthly_revenue'] is not None:
             fig = go.Figure()
+            
+            # Create neon glow effect by layering traces
+            glow_widths = [10, 6, 3]
+            glow_opacities = [0.1, 0.3, 1.0]
+            
+            for width, opacity in zip(glow_widths, glow_opacities):
+                fig.add_trace(go.Scatter(
+                    x=data['monthly_revenue']['month'],
+                    y=data['monthly_revenue']['revenue'],
+                    mode='lines',
+                    line=dict(color=theme['primary'], width=width, shape='spline'),
+                    opacity=opacity,
+                    hoverinfo='skip' if opacity != 1.0 else 'all',
+                    name='Revenue' if opacity == 1.0 else '',
+                    showlegend=False
+                ))
+            
+            # Add the fill under the line
             fig.add_trace(go.Scatter(
                 x=data['monthly_revenue']['month'],
                 y=data['monthly_revenue']['revenue'],
-                mode='lines+markers',
-                line=dict(color=theme['primary'], width=3, shape='spline'),
-                marker=dict(size=8, color=theme['secondary'], line=dict(width=2, color='white')),
+                mode='none',
                 fill='tozeroy',
                 fillcolor=f"rgba{tuple(int(theme['primary'].lstrip('#')[i:i+2], 16) for i in (0, 2, 4)) + (0.1,)}",
-                name='Revenue',
-                hovertemplate="<b>%{x|%B %Y}</b><br>Revenue: R$%{y:,.0f}<extra></extra>"
+                showlegend=False,
+                hoverinfo='skip'
             ))
+            
             fig.update_layout(**create_plotly_layout("", 380))
+            fig.update_traces(hovertemplate="<b>%{x|%B %Y}</b><br>Revenue: R$%{y:,.0f}<extra></extra>")
             st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
     
     with col2:
@@ -874,16 +1146,21 @@ if page == "🏠 Overview":
             fig = go.Figure(data=[go.Pie(
                 labels=['One-time Customers', 'Repeat Customers'],
                 values=[one_time_rate * 100, repeat_rate * 100],
-                hole=0.6,
-                marker=dict(colors=[theme['danger'], theme['success']]),
+                hole=0.65,
+                marker=dict(
+                    colors=[theme['danger'], theme['success']],
+                    line=dict(color=theme['card_bg'], width=2)
+                ),
                 textinfo='percent+label',
-                textfont=dict(size=13, color='white'),
+                textfont=dict(size=13, color=theme['text'], family='Inter'),
                 hovertemplate="<b>%{label}</b><br>%{value:.1f}%<extra></extra>",
-                pull=[0.02, 0.05]
+                pull=[0.0, 0.05],
+                direction='clockwise',
+                sort=False
             )])
             fig.update_layout(**create_plotly_layout("", 380))
-            fig.add_annotation(text="97%", x=0.5, y=0.5, font=dict(size=36, color='white', family='Inter'), showarrow=False)
-            fig.add_annotation(text="One-time", x=0.5, y=0.38, font=dict(size=12, color=theme['muted']), showarrow=False)
+            fig.add_annotation(text="97%", x=0.5, y=0.5, font=dict(size=42, color=theme['text'], family='Inter'), showarrow=False)
+            fig.add_annotation(text="One-time", x=0.5, y=0.35, font=dict(size=12, color=theme['muted']), showarrow=False)
             st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
     
     st.markdown("<br>", unsafe_allow_html=True)
@@ -896,9 +1173,9 @@ if page == "🏠 Overview":
     
     with col1:
         st.markdown(f"""
-        <div class='insight-card' style='border-left-color: {theme['danger']};'>
+        <div class='insight-card' style='border-left-color: {theme['danger']}; background: {theme['card_bg']}; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);'>
             <div style='font-size: 2rem; margin-bottom: 8px;'>📉</div>
-            <div style='color: white; font-weight: 700; font-size: 1.05rem; margin-bottom: 8px;'>97% Never Return</div>
+            <div style='color: {theme['text']}; font-weight: 700; font-size: 1.05rem; margin-bottom: 8px;'>97% Never Return</div>
             <div style='color: {theme["muted"]}; font-size: 0.9rem; line-height: 1.5;'>
                 Nearly all customers are one-and-done. This is the single biggest growth opportunity on the platform.
             </div>
@@ -907,9 +1184,9 @@ if page == "🏠 Overview":
     
     with col2:
         st.markdown(f"""
-        <div class='insight-card' style='border-left-color: {theme['warning']};'>
+        <div class='insight-card' style='border-left-color: {theme['warning']}; background: {theme['card_bg']}; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);'>
             <div style='font-size: 2rem; margin-bottom: 8px;'>⚠️</div>
-            <div style='color: white; font-weight: 700; font-size: 1.05rem; margin-bottom: 8px;'>Prediction Failed at 55%</div>
+            <div style='color: {theme['text']}; font-weight: 700; font-size: 1.05rem; margin-bottom: 8px;'>Prediction Failed at 55%</div>
             <div style='color: {theme["muted"]}; font-size: 0.9rem; line-height: 1.5;'>
                 ML churn prediction drops to coin-flip accuracy once data leakage is removed. Churn is the default state, not a signal.
             </div>
@@ -918,9 +1195,9 @@ if page == "🏠 Overview":
     
     with col3:
         st.markdown(f"""
-        <div class='insight-card' style='border-left-color: {theme['success']};'>
+        <div class='insight-card' style='border-left-color: {theme['success']}; background: {theme['card_bg']}; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);'>
             <div style='font-size: 2rem; margin-bottom: 8px;'>🧪</div>
-            <div style='color: white; font-weight: 700; font-size: 1.05rem; margin-bottom: 8px;'>A/B Test: 4x ROI</div>
+            <div style='color: {theme['text']}; font-weight: 700; font-size: 1.05rem; margin-bottom: 8px;'>A/B Test: 4x ROI</div>
             <div style='color: {theme["muted"]}; font-size: 0.9rem; line-height: 1.5;'>
                 A 10% post-purchase discount lifted repeat purchases by 67%. $200K revenue vs $50K cost = proven strategy.
             </div>
@@ -937,8 +1214,9 @@ if page == "🏠 Overview":
         border-radius: 16px;
         padding: 24px;
         text-align: center;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.02);
     '>
-        <div style='font-size: 1.1rem; color: white; font-weight: 600; margin-bottom: 6px;'>
+        <div style='font-size: 1.1rem; color: {theme['text']}; font-weight: 600; margin-bottom: 6px;'>
             🤖 Want deeper insights? Try the AI Analyst
         </div>
         <div style='color: {theme["muted"]}; font-size: 0.9rem;'>
@@ -1009,15 +1287,15 @@ elif page == "📈 Revenue Analysis":
         col1, col2, col3, col4 = st.columns(4)
         
         with col1:
-            st.metric("💵 Total Revenue", f"R${df_rev['revenue'].sum():,.0f}")
+            st.metric("Total Revenue", f"R${df_rev['revenue'].sum():,.0f}")
         with col2:
-            st.metric("📊 Average Monthly", f"R${df_rev['revenue'].mean():,.0f}")
+            st.metric("Average Monthly", f"R${df_rev['revenue'].mean():,.0f}")
         with col3:
-            st.metric("📈 Peak Month", f"R${df_rev['revenue'].max():,.0f}")
+            st.metric("Peak Month", f"R${df_rev['revenue'].max():,.0f}")
         with col4:
             if len(df_rev) > 1:
                 growth = ((df_rev['revenue'].iloc[-1] / df_rev['revenue'].iloc[1]) - 1) * 100
-                st.metric("🚀 Overall Growth", f"+{growth:.0f}%")
+                st.metric("Overall Growth", f"+{growth:.0f}%")
         
         st.markdown("---")
         
@@ -1588,7 +1866,7 @@ elif page == "🤖 Ask AI":
             st.markdown(f"""
             <div class='chat-user'>
                 <span style='font-size: 0.78rem; color:{theme["primary"]}; font-weight: 600;'>You</span><br>
-                <span style='color: white;'>{content}</span>
+                <span style='color: {theme["text"]};'>{content}</span>
             </div>
             """, unsafe_allow_html=True)
         else:
