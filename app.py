@@ -951,6 +951,11 @@ def load_data():
 
 data = load_data()
 
+# Show a welcome toast once per session
+if "welcome_toast_shown" not in st.session_state:
+    st.toast("Welcome to Olist E-Commerce Analytics!", icon="📊")
+    st.session_state.welcome_toast_shown = True
+
 # ============================================================================
 # SIDEBAR
 # ============================================================================
@@ -1710,7 +1715,7 @@ elif page == "📋 Data Explorer":
             display_df = df
         
         st.markdown("### 📄 Data Preview")
-        st.dataframe(display_df.head(100), use_container_width=True, height=400)
+        st.data_editor(display_df.head(100), use_container_width=True, height=400, hide_index=True)
         
         if show_stats and len(df.select_dtypes(include=['number']).columns) > 0:
             st.markdown("### 📊 Quick Statistics")
@@ -1907,7 +1912,7 @@ elif page == "🤖 Ask AI":
     if submitted and user_input and user_input.strip() and ai_available:
         st.session_state.chat_messages.append({"role": "user", "content": user_input})
 
-        with st.spinner("🧠 Thinking..."):
+        with st.status("🧠 Analyzing your question...", expanded=True) as status:
             try:
                 import sys
                 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -1993,8 +1998,12 @@ elif page == "🤖 Ask AI":
                     "content": answer_text,
                     "sources": sources,
                 })
+                
+                status.update(label="Insight generated successfully!", state="complete", expanded=False)
+                st.toast("Insight generated successfully!", icon="✨")
 
             except Exception as e:
+                status.update(label="Error generating insight", state="error", expanded=False)
                 st.session_state.chat_messages.append({
                     "role": "assistant",
                     "content": f"❌ Error: {e}",
