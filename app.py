@@ -996,7 +996,7 @@ with st.sidebar:
     
     if data['monthly_revenue'] is not None:
         total_revenue = data['monthly_revenue']['revenue'].sum()
-        st.metric("Total Revenue", f"R${total_revenue:,.0f}")
+        st.metric("Total Revenue", f"${total_revenue:,.0f}")
     
     if data['retention_metrics'] is not None:
         repeat_rate = data['retention_metrics']['repeat_purchase_rate'].iloc[0] * 100
@@ -1088,7 +1088,7 @@ if page == "🏠 Overview":
     with col2:
         if data['monthly_revenue'] is not None:
             total_revenue = data['monthly_revenue']['revenue'].sum()
-            st.markdown(create_kpi_card("Total Revenue", f"R${total_revenue/1e6:.1f}M", "2016-2018", "💰"), unsafe_allow_html=True)
+            st.markdown(create_kpi_card("Total Revenue", f"${total_revenue/1e6:.1f}M", "2016-2018", "💰"), unsafe_allow_html=True)
     
     with col3:
         if data['retention_metrics'] is not None:
@@ -1268,7 +1268,7 @@ elif page == "📈 Revenue Analysis":
                 fill='tozeroy',
                 fillcolor=f"rgba{tuple(int(theme['primary'].lstrip('#')[i:i+2], 16) for i in (0, 2, 4)) + (0.15,)}",
                 name='Revenue',
-                hovertemplate="<b>%{x|%B %Y}</b><br>Revenue: R$%{y:,.0f}<extra></extra>"
+                hovertemplate="<b>%{x|%B %Y}</b><br>Revenue: ${y:,.0f}<extra></extra>"
             ))
         elif chart_type == "Line":
             fig.add_trace(go.Scatter(
@@ -1276,13 +1276,13 @@ elif page == "📈 Revenue Analysis":
                 mode='lines+markers',
                 line=dict(color=theme['primary'], width=4),
                 marker=dict(size=12, color=theme['accent']),
-                hovertemplate="<b>%{x|%B %Y}</b><br>Revenue: R$%{y:,.0f}<extra></extra>"
+                hovertemplate="<b>%{x|%B %Y}</b><br>Revenue: ${y:,.0f}<extra></extra>"
             ))
         else:
             fig.add_trace(go.Bar(
                 x=df_rev['month'], y=df_rev['revenue'],
                 marker=dict(color=theme['chart_colors'][0], line=dict(width=0)),
-                hovertemplate="<b>%{x|%B %Y}</b><br>Revenue: R$%{y:,.0f}<extra></extra>"
+                hovertemplate="<b>%{x|%B %Y}</b><br>Revenue: ${y:,.0f}<extra></extra>"
             ))
         
         fig.update_layout(**create_plotly_layout("", 450))
@@ -1292,11 +1292,11 @@ elif page == "📈 Revenue Analysis":
         col1, col2, col3, col4 = st.columns(4)
         
         with col1:
-            st.metric("Total Revenue", f"R${df_rev['revenue'].sum():,.0f}")
+            st.metric("Total Revenue", f"${df_rev['revenue'].sum():,.0f}")
         with col2:
-            st.metric("Average Monthly", f"R${df_rev['revenue'].mean():,.0f}")
+            st.metric("Average Monthly", f"${df_rev['revenue'].mean():,.0f}")
         with col3:
-            st.metric("Peak Month", f"R${df_rev['revenue'].max():,.0f}")
+            st.metric("Peak Month", f"${df_rev['revenue'].max():,.0f}")
         with col4:
             if len(df_rev) > 1:
                 growth = ((df_rev['revenue'].iloc[-1] / df_rev['revenue'].iloc[1]) - 1) * 100
@@ -1318,10 +1318,10 @@ elif page == "📈 Revenue Analysis":
                     color=theme['chart_colors'][:len(yearly_data)],
                     line=dict(width=0)
                 ),
-                text=yearly_data['revenue'].apply(lambda x: f'R${x/1e6:.1f}M'),
+                text=yearly_data['revenue'].apply(lambda x: f'${x/1e6:.1f}M'),
                 textposition='outside',
                 textfont=dict(color='white', size=14),
-                hovertemplate="<b>%{x}</b><br>Revenue: R$%{y:,.0f}<extra></extra>"
+                hovertemplate="<b>%{x}</b><br>Revenue: ${y:,.0f}<extra></extra>"
             )
         ])
         fig.update_layout(**create_plotly_layout("", 400))

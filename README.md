@@ -31,7 +31,7 @@
 
 > We analyzed **100,000+ orders** from Brazil's largest e-commerce marketplace and found that **97% of customers never return after their first purchase** — a **$2M+ annual revenue gap**. Traditional churn prediction models failed (55% accuracy without data leakage). Instead, we proved through a rigorous A/B test simulation that a simple **post-purchase discount increases repeat buyers by 18% with 4x ROI**.
 >
-> This project ships a complete, production-grade analytics pipeline, an interactive **7-page Streamlit dashboard**, and a custom **AI chatbot** that lets anyone — including non-technical stakeholders — query the data in plain English.
+> This project ships a complete, production-grade analytics pipeline, an interactive **7-page Streamlit dashboard** (styled with a custom Glassmorphism Dark Mesh UI), and a custom **AI chatbot** that lets anyone — including non-technical stakeholders — query the data in plain English.
 
 ---
 
